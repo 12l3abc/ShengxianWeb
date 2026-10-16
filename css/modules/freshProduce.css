@@ -1,0 +1,836 @@
+/* 分类标签样式 */
+.category-tabs {
+    display: flex;
+    overflow-x: auto;
+    gap: 10px;
+    padding: 15px 0;
+    margin-bottom: 20px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    background: linear-gradient(135deg, #f9fff9, #f0fff0);
+    border-radius: 15px;
+    padding: 15px;
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.1);
+}
+
+.category-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+/* 分类标签按钮样式 */
+.tab-button {
+    flex: 0 0 auto;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #ffffff, #f0fff0);
+    border: 2px solid #e0f5e0;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 15px;
+    color: #555;
+    font-weight: 500;
+    white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* 标签按钮悬停效果 */
+.tab-button:hover {
+    background: linear-gradient(135deg, #f0fff0, #e0fff0);
+    border-color: #4CAF50;
+    color: #4CAF50;
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.2);
+}
+
+/* 标签按钮点击效果 */
+.tab-button:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+}
+
+/* 标签按钮激活状态 */
+.tab-button.active {
+    background: linear-gradient(45deg, #4CAF50, #8BC34A);
+    color: white;
+    border-color: #4CAF50;
+    box-shadow: 0 6px 25px rgba(76, 175, 80, 0.4);
+    animation: tabPulse 2s infinite ease-in-out;
+}
+
+/* 标签按钮禁用状态 */
+.tab-button:disabled {
+    background: linear-gradient(135deg, #f5f5f5, #e8e8e8);
+    border-color: #d0d0d0;
+    color: #999;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+    animation: none;
+}
+
+/* 标签图标 */
+.tab-icon {
+    margin-right: 8px;
+    font-size: 16px;
+}
+
+/* 排序选项样式 */
+.sort-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 20px;
+    background: linear-gradient(135deg, #ffffff, #f8fff8);
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.1);
+}
+
+.sort-label {
+    font-weight: bold;
+    color: #333;
+    margin-right: 15px;
+    font-size: 16px;
+}
+
+/* 排序按钮样式 */
+.sort-button {
+    padding: 10px 20px;
+    margin: 0 5px;
+    background: linear-gradient(135deg, #ffffff, #f8fff8);
+    border: 2px solid #e0f5e0;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 14px;
+    color: #555;
+    font-weight: 500;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* 排序按钮悬停效果 */
+.sort-button:hover {
+    background: linear-gradient(135deg, #f8fff8, #e8fff8);
+    border-color: #4CAF50;
+    color: #4CAF50;
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.2);
+}
+
+/* 排序按钮点击效果 */
+.sort-button:active {
+    transform: translateY(0) scale(0.97);
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+}
+
+/* 排序按钮激活状态 */
+.sort-button.active {
+    background: linear-gradient(45deg, #8BC34A, #4CAF50);
+    color: white;
+    border-color: #4CAF50;
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+}
+
+/* 排序按钮禁用状态 */
+.sort-button:disabled {
+    background: linear-gradient(135deg, #f5f5f5, #e8e8e8);
+    border-color: #d0d0d0;
+    color: #999;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* 视图选项容器 */
+.view-options {
+    display: flex;
+    gap: 10px;
+}
+
+/* 视图按钮样式 */
+.view-btn {
+    padding: 10px 15px;
+    border: 2px solid #e0f5e0;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #ffffff, #f8fff8);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-size: 14px;
+    color: #555;
+    font-weight: 500;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* 视图按钮悬停效果 */
+.view-btn:hover {
+    border-color: #4CAF50;
+    color: #4CAF50;
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.2);
+}
+
+/* 视图按钮激活状态 */
+.view-btn.active {
+    background: linear-gradient(45deg, #4CAF50, #8BC34A);
+    color: white;
+    border-color: #4CAF50;
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+}
+
+/* 视图按钮禁用状态 */
+.view-btn:disabled {
+    background: linear-gradient(135deg, #f5f5f5, #e8e8e8);
+    border-color: #d0d0d0;
+    color: #999;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* 产品徽章样式 */
+.freshness-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: linear-gradient(45deg, #4CAF50, #8BC34A);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: bold;
+    z-index: 10;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    animation: freshnessPulse 2s infinite;
+}
+
+.organic-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: linear-gradient(45deg, #FF9800, #FFC107);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: bold;
+    z-index: 10;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.discount-badge {
+    position: absolute;
+    top: 45px;
+    left: 10px;
+    background: linear-gradient(45deg, #F44336, #FF5722);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: bold;
+    z-index: 10;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    animation: discountGlow 1.5s ease-in-out infinite alternate;
+}
+
+.limited-stock-badge {
+    position: absolute;
+    top: 45px;
+    right: 10px;
+    background: linear-gradient(45deg, #9C27B0, #E040FB);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: bold;
+    z-index: 10;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* 产品卡片样式增强 */
+.product-card.produce-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.product-card.produce-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+}
+
+/* 加入购物车按钮样式 */
+.add-to-cart-btn {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background: linear-gradient(45deg, #FF6B6B, #FF8E53);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 3px 12px rgba(255, 107, 107, 0.3);
+}
+
+/* 加入购物车按钮悬停效果 */
+.add-to-cart-btn:hover {
+    background: linear-gradient(45deg, #FF8E53, #FF6B6B);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+}
+
+/* 加入购物车按钮点击效果 */
+.add-to-cart-btn:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow: 0 3px 12px rgba(255, 107, 107, 0.5);
+}
+
+/* 加入购物车按钮禁用状态 */
+.add-to-cart-btn:disabled {
+    background: linear-gradient(45deg, #cccccc, #999999);
+    color: #666;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* 价格筛选器样式增强 */
+.price-filter {
+    background: linear-gradient(135deg, #ffffff, #f8fff8);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.1);
+    margin-bottom: 20px;
+}
+
+.price-filter h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.price-range {
+    margin-bottom: 15px;
+}
+
+.price-range label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #666;
+}
+
+.price-slider {
+    width: 100%;
+    height: 8px;
+    border-radius: 4px;
+    background: #e0f5e0;
+    outline: none;
+    -webkit-appearance: none;
+    transition: all 0.3s ease;
+}
+
+.price-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #4CAF50, #8BC34A);
+    cursor: pointer;
+    box-shadow: 0 3px 12px rgba(76, 175, 80, 0.4);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.price-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.3);
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.6);
+}
+
+.price-slider::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #4CAF50, #8BC34A);
+    cursor: pointer;
+    box-shadow: 0 3px 12px rgba(76, 175, 80, 0.4);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+}
+
+.price-inputs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.price-input {
+    flex: 1;
+    padding: 10px 15px;
+    border: 2px solid #e0f5e0;
+    border-radius: 10px;
+    font-size: 14px;
+    text-align: center;
+    transition: all 0.3s ease;
+    background: #ffffff;
+}
+
+.price-input:focus {
+    outline: none;
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+}
+
+.price-input-label {
+    display: flex;
+    align-items: center;
+    color: #666;
+    font-weight: bold;
+}
+
+.filter-actions {
+    display: flex;
+    gap: 15px;
+}
+
+/* 应用筛选按钮样式 */
+.apply-filter-btn {
+    flex: 1;
+    padding: 12px;
+    background: linear-gradient(45deg, #4CAF50, #8BC34A);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 3px 12px rgba(76, 175, 80, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+/* 应用筛选按钮悬停效果 */
+.apply-filter-btn:hover {
+    background: linear-gradient(45deg, #8BC34A, #4CAF50);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+}
+
+/* 应用筛选按钮点击效果 */
+.apply-filter-btn:active {
+    transform: translateY(0) scale(0.97);
+    box-shadow: 0 3px 12px rgba(76, 175, 80, 0.5);
+}
+
+/* 重置筛选按钮样式 */
+.reset-filter-btn {
+    flex: 1;
+    padding: 12px;
+    background: linear-gradient(135deg, #ffffff, #f5f5f5);
+    color: #666;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+/* 重置筛选按钮悬停效果 */
+.reset-filter-btn:hover {
+    background: linear-gradient(135deg, #f5f5f5, #e8e8e8);
+    border-color: #999;
+    color: #333;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+
+/* 重置筛选按钮点击效果 */
+.reset-filter-btn:active {
+    transform: translateY(0) scale(0.97);
+    box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+}
+
+/* 筛选按钮禁用状态 */
+.apply-filter-btn:disabled,
+.reset-filter-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .sort-options {
+        flex-direction: column;
+        gap: 15px;
+        align-items: stretch;
+    }
+    
+    .view-options {
+        justify-content: center;
+    }
+    
+    .price-inputs {
+        flex-direction: column;
+    }
+    
+    .category-tabs {
+        padding: 10px;
+    }
+    
+    .tab-item {
+        padding: 6px 12px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 480px) {
+    .filter-actions {
+        flex-direction: column;
+    }
+    
+    .sort-select {
+        width: 100%;
+    }
+    
+    .price-filter {
+        padding: 15px;
+    }
+}
+
+/* 动画关键帧 */
+@keyframes freshnessPulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+    }
+}
+
+@keyframes discountGlow {
+    from {
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    to {
+        box-shadow: 0 4px 20px rgba(244, 67, 54, 0.5);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* 标签按钮脉冲动画 */
+@keyframes tabPulse {
+    0%, 100% {
+        box-shadow: 0 6px 25px rgba(76, 175, 80, 0.4);
+    }
+    50% {
+        box-shadow: 0 10px 40px rgba(76, 175, 80, 0.6);
+        transform: scale(1.02);
+    }
+}
+
+/* 波纹动画 */
+@keyframes ripple-animation {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+/* 滑块拖拽动画 */
+@keyframes sliderDrag {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* 标签缩放动画 */
+@keyframes tabScale {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+/* 标签淡出动画 */
+@keyframes tabFade {
+    0% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.95); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+/* 排序旋转动画 */
+@keyframes sortRotate {
+    0% { transform: rotate(0deg); }
+    50% { transform: rotate(10deg); }
+    100% { transform: rotate(0deg); }
+}
+
+/* 卡片上滑动画 */
+@keyframes cardSlideUp {
+    0% { 
+        opacity: 0; 
+        transform: translateY(30px) rotateX(10deg); 
+    }
+    100% { 
+        opacity: 1; 
+        transform: translateY(0) rotateX(0deg); 
+    }
+}
+
+/* 产品淡入动画 */
+@keyframes productFadeIn {
+    0% { opacity: 0; transform: scale(0.95); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+/* 基础按钮样式增强 */
+.tab-button, .sort-button, .add-to-cart-btn {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+/* 点击波纹效果 */
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    transform: scale(0);
+    animation: ripple-animation 0.6s ease-out;
+    pointer-events: none;
+}
+
+/* 悬停效果增强 */
+.tab-button:hover, .sort-button:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* 点击反馈效果 */
+.tab-button:active, .sort-button:active {
+    transform: translateY(0) scale(0.95);
+}
+
+/* 排序指示器 */
+.sorting-indicator {
+    display: inline-block;
+    animation: pulse 1s infinite;
+}
+
+/* 排序方向指示器 */
+.sort-direction-indicator {
+    font-size: 12px;
+    margin-left: 5px;
+}
+
+/* 价格筛选区域 */
+.price-filter-section {
+    margin-bottom: 20px;
+    padding: 20px;
+    background: linear-gradient(135deg, #ffffff, #f8fff8);
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.1);
+}
+
+.filter-header {
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.filter-header h4 {
+    margin: 0;
+    color: #333;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.reset-price-filter {
+    padding: 8px 16px;
+    background: linear-gradient(135deg, #f5f5f5, #e0e0e0);
+    border: 2px solid #d0d0d0;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #666;
+    font-weight: 500;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.reset-price-filter:hover {
+    background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+    border-color: #4CAF50;
+    color: #4CAF50;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
+}
+
+.reset-price-filter:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(76, 175, 80, 0.3);
+}
+
+.price-slider-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#price-slider {
+    width: 100%;
+    height: 8px;
+    border-radius: 4px;
+    background: #e0f5e0;
+    outline: none;
+    -webkit-appearance: none;
+    transition: all 0.3s ease;
+}
+
+#price-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #4CAF50, #8BC34A);
+    cursor: pointer;
+    box-shadow: 0 3px 12px rgba(76, 175, 80, 0.4);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#price-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.3);
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.6);
+}
+
+#price-slider::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #4CAF50, #8BC34A);
+    cursor: pointer;
+    box-shadow: 0 3px 12px rgba(76, 175, 80, 0.4);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+}
+
+.price-value {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: bold;
+    color: #333;
+}
+
+#price-display {
+    color: #4CAF50;
+    font-size: 18px;
+}
+
+/* 采摘日期标签样式 */
+.harvest-date-tag {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+/* 产品评分样式 */
+.rating {
+    color: #FFC107;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+/* 产品描述样式 */
+.product-description {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 10px;
+    line-height: 1.4;
+}
+
+/* 产品徽章容器 */
+.product-badges {
+    margin: 10px 0;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* 单个产品徽章样式 */
+.product-badge {
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* 新鲜徽章样式 */
+.fresh-badge {
+    background: linear-gradient(45deg, #4CAF50, #8BC34A);
+    color: white;
+}

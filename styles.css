@@ -1,0 +1,1212 @@
+/* 全局样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Microsoft YaHei', Arial, sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+/* 导航栏样式 */
+.navbar {
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+}
+
+.user-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-actions a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.user-actions a:hover {
+    background-color: #f1f8e9;
+    color: #4CAF50;
+}
+
+.user-actions button {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.user-actions button:hover {
+    background: #c0392b;
+}
+
+.nav-logo {
+    color: #4CAF50;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+}
+
+.nav-item {
+    margin-left: 5px; /* 减少左侧边距以避免换行 */
+    position: relative;
+    overflow: hidden; /* 确保波纹效果不会溢出 */
+}
+
+.nav-link {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    padding: 8px 12px;
+    border-radius: 4px;
+    position: relative;
+    display: block;
+    overflow: hidden; /* 确保波纹效果不会溢出 */
+}
+
+.nav-link:hover {
+    color: #4CAF50;
+    background-color: #f1f8e9;
+}
+
+.nav-link.active {
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #4CAF50;
+    border-radius: 3px;
+}
+
+/* 通用按钮波纹效果 */
+.btn, .add-to-cart-btn, .carousel-btn, .upload-btn, .stepper-btn, 
+.category-btn, .confirm-weight, .weigh-btn, .view-products-btn, 
+.back-to-map, .join-group-btn, .submit-appeal, button {
+    position: relative;
+    overflow: hidden; /* 确保波纹效果不会溢出 */
+}
+
+/* 导航链接和按钮点击波纹效果 */
+.nav-link .ripple,
+.btn .ripple,
+.add-to-cart-btn .ripple,
+.carousel-btn .ripple,
+.upload-btn .ripple,
+.stepper-btn .ripple,
+.category-btn .ripple,
+.confirm-weight .ripple,
+.weigh-btn .ripple,
+.view-products-btn .ripple,
+.back-to-map .ripple,
+.join-group-btn .ripple,
+.submit-appeal .ripple,
+button .ripple {
+    position: absolute;
+    border-radius: 50%;
+    background-color: rgba(76, 175, 80, 0.3);
+    transform: scale(0);
+    animation: ripple 0.6s linear;
+    pointer-events: none;
+}
+
+@keyframes ripple {
+    to {
+        transform: scale(2.5);
+        opacity: 0;
+    }
+}
+
+/* 主要内容区域 */
+#main-content {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+.module {
+    display: none;
+}
+
+.module.active {
+    display: block;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 首页轮播图样式 */
+.carousel-container {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.carousel {
+    position: relative;
+    width: 100%;
+    height: 400px;
+}
+
+.carousel-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.carousel-slide.active {
+    opacity: 1;
+    z-index: 1;
+}
+
+.carousel-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.carousel-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0));
+    color: white;
+    padding: 30px 20px 20px;
+    z-index: 2;
+    text-align: center;
+}
+
+.carousel-caption h3 {
+    margin: 0 0 10px;
+    font-size: 24px;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.carousel-caption p {
+    margin: 0;
+    font-size: 16px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.carousel-caption h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.carousel-caption p {
+    font-size: 16px;
+}
+
+.carousel-indicators {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 3;
+}
+
+.indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.indicator.active {
+    background-color: white;
+    transform: scale(1.2);
+}
+
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 15px 10px;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 3;
+    transition: background-color 0.3s ease;
+}
+
+.carousel-btn:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.prev-btn {
+    left: 10px;
+}
+
+.next-btn {
+    right: 10px;
+}
+
+.carousel-slide.active {
+    opacity: 1;
+}
+
+.carousel-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 15px 20px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.carousel-btn:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.prev-btn {
+    left: 10px;
+}
+
+.next-btn {
+    right: 10px;
+}
+
+.carousel-indicators {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    z-index: 10;
+}
+
+.indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.5);
+    margin: 0 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.indicator.active {
+    background-color: white;
+    transform: scale(1.2);
+}
+
+/* 通用模块样式 */
+.module-header {
+    text-align: center;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.module-header h2 {
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 10px;
+    position: relative;
+    display: inline-block;
+}
+
+.module-header h2::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 3px;
+    background: linear-gradient(to right, #4CAF50, #8BC34A);
+    border-radius: 3px;
+}
+
+.module-header p {
+    color: #666;
+    font-size: 16px;
+}
+
+/* 产品卡片通用样式 */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+/* 特价特效加载样式 */
+.special-offers-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    position: relative;
+    min-height: 200px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #fff8f5 0%, #fff0ed 100%);
+}
+
+.discount-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(45deg, #ff4757, #ff6348);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 14px;
+    transform: rotate(15deg);
+    box-shadow: 0 4px 12px rgba(255, 71, 87, 0.3);
+    z-index: 10;
+    animation: badgeFloat 3s ease-in-out infinite;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* 基于折扣力度的动画效果 */
+.discount-badge.high-discount {
+    background: linear-gradient(45deg, #ff3838, #ff0000);
+    animation: highDiscountFlash 1s ease-in-out infinite;
+}
+
+.discount-badge.medium-discount {
+    background: linear-gradient(45deg, #ff9f43, #ee5a24);
+    animation: mediumDiscountFlash 1.5s ease-in-out infinite;
+}
+
+.discount-badge.low-discount {
+    background: linear-gradient(45deg, #10ac84, #1dd1a1);
+    animation: lowDiscountFlash 2s ease-in-out infinite;
+}
+
+.offer-animation-container {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 波浪效果 - 特价主题 */
+.offer-wave {
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle, rgba(255,71,87,0.2) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: discountWave 2.5s ease-out infinite;
+}
+
+/* 脉冲效果 - 特价强调 */
+.offer-pulse {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    border: 3px solid rgba(255,99,72,0.3);
+    border-radius: 50%;
+    animation: discountPulse 1.5s ease-in-out infinite;
+}
+
+/* 折扣数值动画 */
+.discount-value {
+    position: absolute;
+    font-size: 48px;
+    font-weight: bold;
+    color: #ff4757;
+    text-shadow: 0 2px 10px rgba(255,71,87,0.5);
+    animation: discountValuePulse 2s ease-in-out infinite;
+    z-index: 2;
+}
+
+/* 特价倒计时指示 */
+.offer-countdown-indicator {
+    position: absolute;
+    bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    z-index: 2;
+}
+
+.countdown-digit {
+    background: #ff4757;
+    color: white;
+    width: 25px;
+    height: 30px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    animation: digitBounce 1s ease-in-out infinite alternate;
+}
+
+.countdown-digit:nth-child(1) { animation-delay: 0s; }
+.countdown-digit:nth-child(2) { animation-delay: 0.2s; }
+.countdown-digit:nth-child(4) { animation-delay: 0.4s; }
+.countdown-digit:nth-child(5) { animation-delay: 0.6s; }
+
+.countdown-separator {
+    color: #ff4757;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+/* 动态特价图标 */
+.offer-burst, .daily-special-badge.discount-burst {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.offer-burst span, .daily-special-badge.discount-burst span {
+    background: linear-gradient(45deg, #ff4757, #ff6348);
+    color: white;
+    padding: 2px 6px;
+    font-size: 10px;
+    font-weight: bold;
+    border-radius: 3px;
+    transform: rotate(-10deg);
+    animation: burstBounce 2s ease-in-out infinite;
+}
+
+.offer-burst span:nth-child(1), .daily-special-badge.discount-burst span:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.offer-burst span:nth-child(2), .daily-special-badge.discount-burst span:nth-child(2) {
+    animation-delay: 0.5s;
+}
+
+/* 价格闪烁效果 */
+.price-flash-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.price-flash {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        to bottom right,
+        transparent 45%,
+        rgba(255, 255, 255, 0.6) 50%,
+        transparent 55%
+    );
+    transform: rotate(45deg);
+    animation: priceFlash 3s ease-in-out infinite;
+}
+
+/* 动态特价标签动画 */
+.flash-sale-badge {
+    transition: all 0.3s ease;
+}
+
+.flash-sale-badge.discount-animation-high-discount {
+    animation: badgeJump 1s ease-in-out infinite;
+}
+
+.flash-sale-badge.discount-animation-medium-discount {
+    animation: badgeFloat 2s ease-in-out infinite;
+}
+
+.flash-sale-badge.discount-animation-low-discount {
+    animation: badgePulse 2s ease-in-out infinite;
+}
+
+/* 动画效果 */
+/* 特价特效动画 */
+@keyframes badgeFloat {
+    0%, 100% {
+        transform: rotate(15deg) translateY(0);
+    }
+    50% {
+        transform: rotate(15deg) translateY(-5px);
+    }
+}
+
+@keyframes badgeJump {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2) translateY(-5px);
+    }
+}
+
+@keyframes badgePulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+@keyframes discountWave {
+    0% {
+        transform: scale(0.8);
+        opacity: 0.3;
+    }
+    50% {
+        transform: scale(1);
+        opacity: 0.6;
+    }
+    100% {
+        transform: scale(1.2);
+        opacity: 0;
+    }
+}
+
+@keyframes discountPulse {
+    0% {
+        transform: scale(0.9);
+        border-color: rgba(255,99,72,0.3);
+    }
+    50% {
+        transform: scale(1.1);
+        border-color: rgba(255,99,72,0.6);
+    }
+    100% {
+        transform: scale(0.9);
+        border-color: rgba(255,99,72,0.3);
+    }
+}
+
+@keyframes discountValuePulse {
+    0%, 100% {
+        transform: scale(1);
+        text-shadow: 0 2px 10px rgba(255,71,87,0.5);
+    }
+    50% {
+        transform: scale(1.1);
+        text-shadow: 0 4px 20px rgba(255,71,87,0.8);
+    }
+}
+
+@keyframes digitBounce {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(1.1);
+    }
+}
+
+@keyframes burstBounce {
+    0%, 100% {
+        transform: rotate(-10deg) translateY(0);
+    }
+    50% {
+        transform: rotate(-10deg) translateY(-3px);
+    }
+}
+
+@keyframes priceFlash {
+    0%, 100% {
+        transform: rotate(45deg) translateX(-100%);
+    }
+    50% {
+        transform: rotate(45deg) translateX(100%);
+    }
+}
+
+/* 折扣力度动画 */
+@keyframes highDiscountFlash {
+    0%, 100% {
+        box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3);
+        transform: rotate(15deg) scale(1);
+    }
+    50% {
+        box-shadow: 0 6px 20px rgba(255, 0, 0, 0.6);
+        transform: rotate(15deg) scale(1.1);
+    }
+}
+
+@keyframes mediumDiscountFlash {
+    0%, 100% {
+        box-shadow: 0 4px 12px rgba(255, 159, 67, 0.3);
+    }
+    50% {
+        box-shadow: 0 6px 20px rgba(255, 159, 67, 0.6);
+    }
+}
+
+@keyframes lowDiscountFlash {
+    0%, 100% {
+        box-shadow: 0 4px 12px rgba(16, 172, 132, 0.3);
+    }
+    50% {
+        box-shadow: 0 6px 20px rgba(16, 172, 132, 0.6);
+    }
+}
+
+/* 限时秒杀栏样式 */
+.flash-sale-container {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 30px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+}
+
+.flash-sale-container .module-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.flash-sale-container .module-header h2 {
+    color: #e74c3c;
+    font-size: 24px;
+    margin: 0;
+    position: relative;
+}
+
+.flash-sale-container .module-header h2::after {
+    background: linear-gradient(to right, #e74c3c, #ff7675);
+    bottom: -8px;
+}
+
+.countdown-timer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.countdown-label {
+    font-size: 16px;
+    color: #666;
+}
+
+.countdown-display {
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    font-weight: bold;
+    color: #e74c3c;
+}
+
+.countdown-hour,
+.countdown-minute,
+.countdown-second {
+    background-color: #333;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    min-width: 40px;
+    text-align: center;
+}
+
+.flash-sale-products {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.flash-sale-product {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.flash-sale-product:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+.flash-product-image {
+    position: relative;
+    padding-top: 100%; /* 1:1 宽高比 */
+    overflow: hidden;
+}
+
+.flash-product-image img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.flash-sale-product:hover .flash-product-image img {
+    transform: scale(1.05);
+}
+
+.flash-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #e74c3c;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.flash-product-info {
+    padding: 15px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.flash-product-name {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    color: #333;
+    height: 48px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.flash-price-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.flash-current-price {
+    font-size: 20px;
+    font-weight: bold;
+    color: #e74c3c;
+}
+
+.flash-original-price {
+    font-size: 14px;
+    color: #999;
+    text-decoration: line-through;
+}
+
+.flash-discount {
+    background-color: #ff7675;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 12px;
+}
+
+.flash-stock-info {
+    margin-bottom: 15px;
+}
+
+.flash-progress-bar {
+    width: 100%;
+    height: 6px;
+    background-color: #e0e0e0;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 5px;
+}
+
+.flash-progress-fill {
+    height: 100%;
+    background: linear-gradient(to right, #ff7675, #fd79a8);
+    border-radius: 3px;
+    transition: width 0.3s ease;
+}
+
+.flash-stock-text {
+    font-size: 12px;
+    color: #666;
+}
+
+.flash-add-to-cart {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+    width: 100%;
+}
+
+.flash-add-to-cart:hover {
+    background-color: #c0392b;
+}
+
+.flash-sale-products .loading {
+    text-align: center;
+    color: #666;
+    padding: 40px;
+    grid-column: 1 / -1;
+}
+
+
+.product-card {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.product-image {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-image img {
+    transform: scale(1.05);
+}
+
+.product-info {
+    padding: 15px;
+}
+
+.product-info h3, .product-info h4 {
+    margin: 0 0 10px 0;
+    color: #333;
+}
+
+.product-info p {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.product-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.price {
+    font-size: 18px;
+    font-weight: bold;
+    color: #FF5722;
+}
+
+.add-to-cart-btn {
+    background: linear-gradient(to right, #4CAF50, #8BC34A);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+}
+
+.add-to-cart-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+}
+
+/* 任务中心样式 */
+.task-center {
+    position: relative;
+    display: inline-block;
+}
+
+.task-center-label {
+    cursor: pointer;
+    padding: 5px 10px;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 4px;
+}
+
+.task-dropdown {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background-color: white;
+    min-width: 120px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.task-center:hover .task-dropdown {
+    display: block;
+}
+
+.task-dropdown a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    border-bottom: 1px solid #eee;
+}
+
+.task-dropdown a:hover {
+    background-color: #f1f1f1;
+}
+
+.task-dropdown a:last-child {
+    border-bottom: none;
+}
+
+/* 购物车图标 */
+.cart-icon {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 1000;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background-color: #ffffff;
+    border-radius: 50%;
+    padding: 15px;
+    box-shadow: 0 8px 25px rgba(255, 107, 53, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
+
+.cart-icon:hover {
+    transform: scale(1.15);
+    box-shadow: 0 12px 35px rgba(255, 107, 53, 0.4);
+    background-color: #fff8f5;
+}
+
+.cart-icon:active {
+    transform: scale(1.05);
+}
+
+.cart-icon svg {
+    width: 40px;
+    height: 40px;
+    transition: all 0.3s ease;
+}
+
+.cart-icon:hover svg {
+    stroke: #FF8C42;
+    transform: rotate(5deg);
+}
+
+.cart-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: linear-gradient(135deg, #FF6B35, #F7931E);
+    color: white;
+    border-radius: 50%;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: bold;
+    border: 3px solid white;
+    box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+    transition: all 0.3s ease;
+}
+
+/* 添加购物车数量变化动画 */
+@keyframes countUpdate {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+    100% { transform: scale(1); }
+}
+
+.cart-count.update {
+    animation: countUpdate 0.3s ease;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .nav-container {
+        flex-wrap: wrap;
+    }
+    
+    .nav-menu {
+        width: 100%;
+        justify-content: center;
+        margin-top: 10px;
+        flex-wrap: wrap;
+    }
+    
+    .nav-item {
+        margin: 5px;
+    }
+    
+    .carousel {
+        height: 250px;
+    }
+    
+    .carousel-btn {
+        padding: 10px 15px;
+        font-size: 16px;
+    }
+    
+    .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 15px;
+    }
+    
+    .module-header h2 {
+        font-size: 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .nav-container {
+        padding: 10px;
+    }
+    
+    .nav-logo {
+        font-size: 20px;
+    }
+    
+    .nav-menu {
+        margin-top: 10px;
+    }
+    
+    .nav-item {
+        margin: 3px;
+    }
+    
+    .nav-link {
+        padding: 6px 8px;
+        font-size: 14px;
+    }
+    
+    .user-actions {
+        gap: 8px;
+    }
+    
+    .user-actions a, .user-actions button {
+        padding: 4px 6px;
+        font-size: 14px;
+    }
+    
+    #main-content {
+        padding: 0 10px;
+    }
+    
+    .carousel {
+        height: 200px;
+    }
+    
+    .product-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .module-header h2 {
+        font-size: 22px;
+    }
+    
+    .module-header p {
+        font-size: 14px;
+    }
+}

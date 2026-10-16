@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>肉禽蛋品 - 瞬鲜达生鲜平台</title>
+    <style>
+        /* 全局样式补充 */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        
+        .module-header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            margin-bottom: 30px;
+        }
+        
+        .module-header h2 {
+            margin: 0;
+            font-size: 36px;
+            color: #2c3e50;
+        }
+        
+        .module-header p {
+            margin: 10px 0 0;
+            font-size: 18px;
+            color: #555;
+        }
+        
+        .sort-options {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 20px 0;
+            padding: 0 20px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .sort-button {
+            padding: 8px 16px;
+            background: #e0e0e0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .sort-button.active {
+            background: #1976D2;
+            color: white;
+        }
+        
+        .empty-tip {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+            font-size: 18px;
+        }
+        
+        /* 温度相关特效样式 */
+        .temp-needle {
+            position: absolute;
+            top: -18px;
+            left: 20px;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.8);
+            box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+            background: rgba(14, 165, 233, 0.15);
+            transform-origin: 50% 110%;
+            transition: transform 0.4s ease, background 0.4s ease;
+            z-index: 10;
+        }
+        
+        .temp-needle::before {
+            content: '';
+            position: absolute;
+            width: 4px;
+            height: 18px;
+            background: #fff;
+            top: 6px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 4px;
+        }
+        
+        .temp-progress {
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            height: 4px;
+            width: 100%;
+            background: rgba(255,255,255,0.16);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .temp-progress-fill {
+            height: 100%;
+            width: 48%;
+            background: linear-gradient(90deg,#e0f2fe,#bae6fd);
+            transition: width 0.35s ease, background 0.35s ease;
+        }
+        
+        .cold-smoke {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.12), transparent 40%), radial-gradient(circle at 80% 60%, rgba(255,255,255,0.1), transparent 45%);
+            mixBlendMode: screen;
+            pointerEvents: none;
+            transform: translateY(0);
+            opacity: 0.6;
+        }
+        
+        .temperature-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: linear-gradient(45deg, #14b8a6, #0d9488);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        /* 肉禽蛋品模块样式 */
+        
+        /* 温度标签样式 */
+        .temperature-tabs {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .temp-tab {
+            flex: 1;
+            padding: 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .temp-tab:not(.active) {
+            background: #f5f5f5;
+        }
+        
+        .temp-tab.active {
+            background: linear-gradient(45deg, #e0f2fe, #bae6fd);
+            color: #0369a1;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+        }
+        
+        .tab-badge {
+            display: block;
+            font-size: 14px;
+            margin-top: 5px;
+            opacity: 0.9;
+        }
+        
+        /* 分类标签样式 */
+        .category-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .category-tag {
+            padding: 8px 16px;
+            background: #e0e0e0;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .category-tag.active {
+            background: linear-gradient(45deg, #FF5722, #FF9800);
+            color: white;
+            box-shadow: 0 4px 10px rgba(255, 87, 34, 0.3);
+        }
+        
+        /* 切片标签样式 */
+        .slice-tag {
+            display: inline-block;
+            background: linear-gradient(45deg, #4CAF50, #8BC34A);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        
+        /* 检疫证书样式 */
+        .quarantine-cert img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        /* 检疫证书模态框样式 */
+        .certificate-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .certificate-modal .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+        }
+        
+        .certificate-modal .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #333;
+        }
+        
+        .certificate-modal .certificate-full {
+            max-width: 100%;
+            max-height: 80vh;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .certificate-modal .modal-footer {
+            text-align: center;
+            margin-top: 15px;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        
+        /* 切片设置模态框样式 */
+        .slicing-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .slicing-modal .slicing-content {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            position: relative;
+            max-width: 400px;
+            width: 90%;
+        }
+        
+        .slicing-modal .modal-close-slice {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #333;
+        }
+        
+        .slicing-modal h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #1976D2;
+        }
+        
+        .slicing-modal .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .slicing-modal label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .slicing-modal .weight-slider {
+            width: 100%;
+        }
+        
+        .slicing-modal .weight-value {
+            display: block;
+            text-align: center;
+            font-weight: bold;
+            font-size: 18px;
+            color: #1976D2;
+        }
+        
+        .slicing-modal .estimated-price {
+            font-size: 20px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+        
+        .slicing-modal .confirm-slice {
+            width: 100%;
+            padding: 12px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .slicing-modal .confirm-slice:hover {
+            background: #45a049;
+        }
+        
+        /* 肉禽网格样式 */
+        .meat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+            padding: 0 20px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* 商品卡片样式 */
+        .product-card.meat-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-height: 300px;
+        }
+        
+        .product-card.meat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* 商品图片样式 */
+        .product-image {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            background: #f8f9fa;
+        }
+        
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+        
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+        
+        /* 商品信息样式 */
+        .product-info {
+            padding: 15px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .product-info h4 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .product-info p {
+            margin: 0;
+            font-size: 14px;
+            color: #666;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            flex: 1;
+        }
+        
+        /* 商品元数据样式 */
+        .product-meta {
+            margin: 10px 0;
+        }
+        
+        .price {
+            font-size: 20px;
+            font-weight: bold;
+            color: #FF5722;
+        }
+        
+        /* 添加到购物车按钮样式 */
+        .add-to-cart-btn {
+            background: linear-gradient(45deg, #4CAF50, #8BC34A);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .add-to-cart-btn:hover {
+            background: linear-gradient(45deg, #43A047, #7CB342);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+        
+        /* 肉禽徽章样式 */
+        .meat-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: linear-gradient(45deg, #FF5722, #FF9800);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        /* 商品徽章样式 */
+        .product-badges {
+            margin: 5px 0;
+        }
+        
+        .product-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        
+        .fresh-badge {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        /* 加载状态样式 */
+        .loading {
+            text-align: center;
+            padding: 50px 0;
+            font-size: 18px;
+            color: #666;
+        }
+        
+        /* 错误信息样式 */
+        .error-message {
+            text-align: center;
+            padding: 50px 0;
+            color: #F44336;
+        }
+        
+        .error-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        
+        .retry-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 15px;
+        }
+        
+        .retry-btn:hover {
+            background: #43A047;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="nav-logo">瞬鲜达</h1>
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link">首页</a></li>
+                <li class="nav-item"><a href="index.html" class="nav-link">今日特价</a></li>
+                <li class="nav-item"><a href="index.html" class="nav-link">新鲜果蔬</a></li>
+                <li class="nav-item"><a href="meat-poultry-page.html" class="nav-link active">肉禽蛋品</a></li>
+                <li class="nav-item"><a href="index.html" class="nav-link">水产海鲜</a></li>
+                <li class="nav-item"><a href="index.html" class="nav-link">乳品面点</a></li>
+                <li class="nav-item"><a href="index.html" class="nav-link">豆制品/杂粮</a></li>
+                <li class="nav-item"><a href="index.html" class="nav-link">速食净菜</a></li>
+                <li class="nav-item"><a href="index.html" class="nav-link">产地直采</a></li>
+                <li class="nav-item"><a href="index.html" class="nav-link">无忧售后</a></li>
+            </ul>
+            <div class="user-actions">
+                <span id="user-info"></span>
+                <a href="login.html" id="personal-center">个人中心</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容区域 -->
+    <main id="main-content">
+        <!-- 肉禽蛋品模块 -->
+        <section id="meat-poultry" class="module active">
+            <div class="module-header">
+                <h2>肉禽蛋品</h2>
+                <p>精选优质肉禽蛋品，安全放心，营养丰富</p>
+            </div>
+            <div class="temperature-tabs">
+                <button class="temp-tab active" data-tab="chilled">
+                    冷鲜肉类
+                    <span class="tab-badge">保鲜 0-4°C</span>
+                </button>
+                <button class="temp-tab" data-tab="frozen">
+                    冷冻肉类
+                    <span class="tab-badge">冷冻 -18°C</span>
+                </button>
+            </div>
+            <div class="meat-categories">
+                <div class="category-tags">
+                    <span class="category-tag active" data-type="all">全部</span>
+                    <span class="category-tag" data-type="pork">猪肉</span>
+                    <span class="category-tag" data-type="beef">牛肉</span>
+                    <span class="category-tag" data-type="chicken">鸡肉</span>
+                    <span class="category-tag" data-type="duck">鸭肉</span>
+                    <span class="category-tag" data-type="goose">鹅肉</span>
+                    <span class="category-tag" data-type="egg">蛋类</span>
+                </div>
+            </div>
+            <div class="sort-options">
+                <span>排序:</span>
+                <button class="sort-button active" data-sort="default">默认排序</button>
+                <button class="sort-button" data-sort="price">价格排序</button>
+                <button class="sort-button" data-sort="weight">重量排序</button>
+            </div>
+            <div class="meat-grid" id="meat-grid">
+                <!-- 商品将在此处加载 -->
+            </div>
+        </section>
+    </main>
+
+    <!-- 购物车图标 -->
+    <div class="cart-icon">
+        <img src="src/cart.png" alt="购物车" />
+        <span class="cart-count" id="cart-count">0</span>
+    </div>
+
+    <!-- 检疫证书模态框 -->
+    <div class="certificate-modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <img src="" alt="检疫证书" class="certificate-full">
+            <div class="modal-footer">
+                <p>官方检疫证书，请放心购买</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // 商品数据
+        const meatPoultryProducts = [
+            {
+                id: 'meat1',
+                name: '新鲜猪五花肉',
+                description: '精选优质五花肉，肥瘦相间，肉质鲜嫩',
+                price: 35.8,
+                image: 'src/shengxian.png',
+                category: 'meatPoultry',
+                badge: '冷鲜'
+            },
+            {
+                id: 'meat2',
+                name: '新鲜猪里脊肉',
+                description: '猪身上最嫩的部位，适合炒菜、做肉脯',
+                price: 42.5,
+                image: 'src/shengxian.png',
+                category: 'meatPoultry',
+                badge: '冷鲜'
+            },
+            {
+                id: 'meat3',
+                name: '冷冻牛里脊肉',
+                description: '进口冷冻牛里脊，肉质鲜美，适合煎烤',
+                price: 89.9,
+                image: 'src/shengxian.png',
+                category: 'meatPoultry',
+                badge: '冷冻'
+            },
+            {
+                id: 'meat4',
+                name: '冷冻牛腩肉',
+                description: '优质牛腩，适合炖煮，口感软烂',
+                price: 65.8,
+                image: 'src/shengxian.png',
+                category: 'meatPoultry',
+                badge: '冷冻'
+            },
+            {
+                id: 'meat5',
+                name: '新鲜鸡胸肉',
+                description: '新鲜鸡胸肉，低脂高蛋白，健康之选',
+                price: 28.9,
+                image: 'src/shengxian.png',
+                category: 'meatPoultry',
+                badge: '冷鲜'
+            },
+            {
+                id: 'meat6',
+                name: '新鲜鸡腿肉',
+                description: '新鲜去骨鸡腿肉，肉质鲜嫩，适合各种烹饪方式',
+                price: 25.8,
+                image: 'src/shengxian.png',
+                category: 'meatPoultry',
+                badge: '冷鲜'
+            },
+            {
+                id: 'meat7',
+                name: '冷冻整鸭',
+                description: '整只冷冻鸭子，适合做烤鸭、啤酒鸭',
+                price: 59.9,
+                image: 'src/shengxian.png',
+                category: 'meatPoultry',
+                badge: '冷冻'
+            },
+            {
+                id: 'meat8',
+                name: '新鲜鸡蛋',
+                description: '散养土鸡蛋，蛋黄饱满，营养丰富',
+                price: 19.8,
+                image: 'src/shengxian.png',
+                category: 'meatPoultry',
+                badge: '新鲜'
+            },
+            {
+                id: 'meat9',
+                name: '冷冻牛排',
+                description: '进口冷冻牛排，肉质鲜嫩，适合煎制',
+                price: 78.5,
+                image: 'src/shengxian.png',
+                category: 'meatPoultry',
+                badge: '冷冻'
+            },
+            {
+                id: 'meat10',
+                name: '新鲜鸭蛋',
+                description: '新鲜鸭蛋，适合做咸鸭蛋、皮蛋',
+                price: 16.8,
+                image: 'src/shengxian.png',
+                category: 'meatPoultry',
+                badge: '新鲜'
+            }
+        ];
+
+        // 肉禽蛋品页面逻辑
+        class MeatPoultryPage {
+            constructor() {
+                this.currentTab = 'chilled';
+                this.currentCategory = 'all';
+                this.sortOrder = 'default';
+                this.currentProducts = [];
+                this.init();
+            }
+
+            init() {
+                this.setupTemperatureEffects();
+                this.bindEvents();
+                this.loadData();
+                this.setupCategoryMagnet();
+            }
+
+            setupTemperatureEffects() {
+                // 添加温度条
+                const tabs = document.querySelector('.temperature-tabs');
+                const progress = document.createElement('div');
+                progress.className = 'temp-progress';
+                progress.innerHTML = '<div class="temp-progress-fill"></div>';
+                tabs.style.position = 'relative';
+                tabs.appendChild(progress);
+
+                // 添加温度计指针
+                const needle = document.createElement('div');
+                needle.className = 'temp-needle';
+                tabs.appendChild(needle);
+            }
+
+            bindEvents() {
+                // 温度标签切换
+                document.querySelectorAll('.temp-tab').forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        const newTab = tab.getAttribute('data-tab');
+                        this.switchTab(newTab);
+                    });
+                });
+
+                // 分类标签切换
+                document.querySelectorAll('.category-tag').forEach(tag => {
+                    tag.addEventListener('click', () => {
+                        const type = tag.getAttribute('data-type');
+                        this.switchCategory(type);
+                    });
+                });
+
+                // 排序选项切换
+                document.querySelectorAll('.sort-button').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const sort = btn.getAttribute('data-sort');
+                        this.changeSortOrder(sort);
+                    });
+                });
+            }
+
+            setupCategoryMagnet() {
+                // 分类标签磁吸效果
+                document.addEventListener('mousemove', (e) => {
+                    document.querySelectorAll('.category-tag').forEach((tag) => {
+                        const rect = tag.getBoundingClientRect();
+                        const dx = e.clientX - (rect.left + rect.width / 2);
+                        const dy = e.clientY - (rect.top + rect.height / 2);
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        const influence = Math.max(0, 1 - dist / 200);
+                        const scale = 1 + influence * 0.12;
+                        tag.style.transform = `scale(${scale})`;
+                        tag.style.transition = 'transform 0.12s ease';
+                    });
+                });
+                
+                document.addEventListener('mouseleave', () => {
+                    document.querySelectorAll('.category-tag').forEach((tag) => {
+                        tag.style.transform = 'scale(1)';
+                    });
+                });
+            }
+
+            switchTab(tab) {
+                this.currentTab = tab;
+                
+                // 更新激活状态
+                document.querySelectorAll('.temp-tab').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+                
+                // 更新温度条
+                const fill = document.querySelector('.temp-progress-fill');
+                fill.style.width = tab === 'chilled' ? '48%' : '90%';
+                fill.style.background = tab === 'chilled'
+                    ? 'linear-gradient(90deg,#e0f2fe,#bae6fd)'
+                    : 'linear-gradient(90deg,#bae6fd,#7dd3fc)';
+                
+                // 更新温度计指针
+                const needle = document.querySelector('.temp-needle');
+                needle.style.transform = tab === 'chilled' ? 'rotate(-25deg)' : 'rotate(25deg)';
+                needle.style.background = tab === 'chilled'
+                    ? 'rgba(14, 165, 233, 0.15)'
+                    : 'rgba(14, 165, 233, 0.2)';
+                
+                this.loadData();
+            }
+
+            switchCategory(type) {
+                this.currentCategory = type;
+                
+                // 更新激活状态
+                document.querySelectorAll('.category-tag').forEach(tag => {
+                    tag.classList.remove('active');
+                });
+                document.querySelector(`[data-type="${type}"]`).classList.add('active');
+                
+                this.filterAndRenderProducts();
+            }
+
+            changeSortOrder(sort) {
+                this.sortOrder = sort;
+                
+                // 更新激活状态
+                document.querySelectorAll('.sort-button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                document.querySelector(`[data-sort="${sort}"]`).classList.add('active');
+                
+                this.filterAndRenderProducts();
+            }
+
+            loadData() {
+                // 过滤商品数据
+                const isChilled = this.currentTab === 'chilled';
+                let filteredProducts = [];
+                
+                if (isChilled) {
+                    // 冷鲜商品
+                    filteredProducts = meatPoultryProducts.filter(product => 
+                        product.badge === '冷鲜' || product.badge === '新鲜'
+                    );
+                } else {
+                    // 冷冻商品
+                    filteredProducts = meatPoultryProducts.filter(product => 
+                        product.badge === '冷冻'
+                    );
+                }
+                
+                // 如果过滤后没有数据，使用全部商品
+                if (filteredProducts.length === 0) {
+                    filteredProducts = meatPoultryProducts;
+                }
+                
+                // 为商品添加额外属性
+                this.currentProducts = filteredProducts.map((product, index) => {
+                    // 检测商品类型
+                    let productType = 'other';
+                    if (product.name.includes('猪')) {
+                        productType = 'pork';
+                    } else if (product.name.includes('牛')) {
+                        productType = 'beef';
+                    } else if (product.name.includes('鸡')) {
+                        productType = 'chicken';
+                    } else if (product.name.includes('鸭')) {
+                        productType = 'duck';
+                    } else if (product.name.includes('鹅')) {
+                        productType = 'goose';
+                    } else if (product.name.includes('蛋')) {
+                        productType = 'egg';
+                    }
+                    
+                    return {
+                        ...product,
+                        temperature: isChilled ? '0-4°C 冷鲜' : '-18°C 冷冻',
+                        weight: `${(Math.random() * 1000 + 500).toFixed(0)}g`,
+                        sliceable: ['新鲜猪五花肉', '新鲜猪里脊肉', '新鲜鸡胸肉'].includes(product.name),
+                        type: productType
+                    };
+                });
+                
+                this.filterAndRenderProducts();
+            }
+
+            filterAndRenderProducts() {
+                let filtered = this.currentProducts;
+                
+                // 按分类过滤
+                if (this.currentCategory !== 'all') {
+                    filtered = filtered.filter(product => product.type === this.currentCategory);
+                }
+                
+                // 排序
+                switch (this.sortOrder) {
+                    case 'price':
+                        filtered.sort((a, b) => a.price - b.price);
+                        break;
+                    case 'weight':
+                        filtered.sort((a, b) => {
+                            const weightA = parseInt(a.weight, 10);
+                            const weightB = parseInt(b.weight, 10);
+                            return weightA - weightB;
+                        });
+                        break;
+                    default:
+                        // 默认排序，保持原有顺序
+                        break;
+                }
+                
+                this.renderProducts(filtered);
+            }
+
+            renderProducts(products) {
+                const grid = document.getElementById('meat-grid');
+                
+                if (products.length === 0) {
+                    grid.innerHTML = '<div class="empty-tip">暂无该分类商品</div>';
+                    return;
+                }
+                
+                const productCardsHtml = products.map((product, index) => `
+                    <div class="product-card meat-card" data-id="${product.id}">
+                        <div class="product-image">
+                            <img src="${product.image}" alt="${product.name}" onerror="this.onerror=null;this.src='src/shengxian.png'">
+                            <div class="temperature-badge">${product.temperature}</div>
+                            ${product.sliceable ? '<div class="slice-tag">可切片</div>' : ''}
+                            <div class="cold-smoke"></div>
+                        </div>
+                        <div class="product-info">
+                            <h4>${product.name}</h4>
+                            <p class="product-description">${product.description}</p>
+                            <div class="product-details">
+                                <div class="detail-item">
+                                    <span class="detail-label">重量:</span>
+                                    <span class="detail-value">${product.weight}</span>
+                                </div>
+                            </div>
+                            <div class="product-meta">
+                                <span class="price">¥${product.price.toFixed(2)}</span>
+                                <button class="add-to-cart-btn">加入购物车</button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                grid.innerHTML = productCardsHtml;
+                
+                this.addCardAnimations();
+                this.addColdSmokeEffect();
+            }
+
+            addCardAnimations() {
+                const cards = document.querySelectorAll('.meat-card');
+                
+                cards.forEach((card, index) => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                    
+                    setTimeout(() => {
+                        card.style.transition = 'all 0.5s ease-out';
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, index * 100);
+                    
+                    // 悬停效果
+                    card.addEventListener('mouseenter', () => {
+                        card.style.transition = 'all 0.3s ease-out';
+                        card.style.transform = 'translateY(-5px) scale(1.02)';
+                        card.style.boxShadow = '0 15px 30px rgba(0,0,0,0.15)';
+                    });
+                    
+                    card.addEventListener('mouseleave', () => {
+                        card.style.transition = 'all 0.3s ease-out';
+                        card.style.transform = 'translateY(0) scale(1)';
+                        card.style.boxShadow = '0 4px 15px rgba(0,0,0,0.1)';
+                    });
+                });
+            }
+
+            addColdSmokeEffect() {
+                // 为图片添加冷烟雾效果动画
+                setTimeout(() => {
+                    document.querySelectorAll('.cold-smoke').forEach((smoke, index) => {
+                        let startTime = null;
+                        const animate = (timestamp) => {
+                            if (!startTime) startTime = timestamp;
+                            const progress = ((timestamp - startTime) % 6000) / 6000;
+                            const y = Math.sin(progress * Math.PI * 2) * -6;
+                            const opacity = 0.6 + Math.sin(progress * Math.PI * 2) * 0.3;
+                            smoke.style.transform = `translateY(${y}px)`;
+                            smoke.style.opacity = opacity;
+                            requestAnimationFrame(animate);
+                        };
+                        requestAnimationFrame(animate);
+                    });
+                }, 300);
+            }
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            new MeatPoultryPage();
+        });
+    </script>
+</body>
+</html>

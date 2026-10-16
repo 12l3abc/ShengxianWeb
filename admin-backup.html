@@ -1,0 +1,2280 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>瞬鲜达 - 管理员面板</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+        
+        .admin-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* 垂直导航栏样式 */
+        .admin-sidebar {
+            width: 250px;
+            background: #2c3e50;
+            color: white;
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+        }
+        
+        .admin-sidebar-header {
+            padding: 20px;
+            background: #1a252f;
+            text-align: center;
+        }
+        
+        .admin-sidebar-header h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+        
+        .admin-sidebar-nav {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .admin-sidebar-nav li {
+            border-bottom: 1px solid #34495e;
+        }
+        
+        .admin-sidebar-nav a {
+            display: block;
+            padding: 15px 20px;
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .admin-sidebar-nav a:hover,
+        .admin-sidebar-nav a.active {
+            background: #34495e;
+            color: white;
+            border-left: 4px solid #3498db;
+        }
+        
+        .admin-sidebar-nav a i {
+            margin-right: 10px;
+        }
+        
+        /* 主内容区域 */
+        .admin-main {
+            flex: 1;
+            margin-left: 250px;
+            padding: 20px;
+        }
+        
+        .admin-header {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .admin-header h1 {
+            color: #2c3e50;
+            font-size: 24px;
+        }
+        
+        .admin-header-actions button {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        
+        .admin-content {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .admin-content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .admin-content-header h2 {
+            color: #2c3e50;
+        }
+        
+        .btn {
+            padding: 10px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #2980b9;
+        }
+        
+        .btn.success {
+            background: #27ae60;
+        }
+        
+        .btn.success:hover {
+            background: #229954;
+        }
+        
+        .btn.danger {
+            background: #e74c3c;
+        }
+        
+        .btn.danger:hover {
+            background: #c0392b;
+        }
+        
+        /* 表格样式 */
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .admin-table th,
+        .admin-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .admin-table th {
+            background: #f8f9fa;
+            font-weight: bold;
+        }
+        
+        .admin-table tr:hover {
+            background: #f5f5f5;
+        }
+        
+        /* 表单样式 */
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        /* 隐藏所有模块，除了默认显示的 */
+        .admin-module {
+            display: none;
+        }
+        
+        .admin-module.active {
+            display: block;
+        }
+        
+        /* 商品图片样式 */
+        .product-image {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 3px;
+        }
+        
+        /* 模态框样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-header h3 {
+            margin: 0;
+        }
+        
+        .modal-close {
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        .modal-footer {
+            margin-top: 20px;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- 垂直导航栏 -->
+        <div class="admin-sidebar">
+            <div class="admin-sidebar-header">
+                <h2>管理员面板</h2>
+            </div>
+            <ul class="admin-sidebar-nav">
+                <li><a href="#" class="active" data-module="dashboard">仪表盘</a></li>
+                <li><a href="#" data-module="freshProduce">新鲜果蔬</a></li>
+                <li><a href="#" data-module="meatPoultry">肉禽蛋品</a></li>
+                <li><a href="#" data-module="seafood">水产海鲜</a></li>
+                <li><a href="#" data-module="dairyBakery">乳品面点</a></li>
+                <li><a href="#" data-module="beanProducts">豆制品/杂粮</a></li>
+                <li><a href="#" data-module="readyMeals">速食净菜</a></li>
+                <li><a href="#" data-module="specialOffers">今日特价</a></li>
+                <li><a href="#" data-module="directSourcing">产地直采</a></li>
+                <li><a href="#" data-module="users">用户管理</a></li>
+
+            </ul>
+        </div>
+        
+        <!-- 主内容区域 -->
+        <div class="admin-main">
+            <div class="admin-header" style="display: flex; justify-content: space-between; align-items: center;">
+                <h1>管理员面板</h1>
+                <button class="btn danger" id="logout-btn-panel">退出登录</button>
+            </div>
+            
+            <!-- 仪表盘模块 -->
+            <div class="admin-module active" id="dashboard-module">
+                <div class="admin-content">
+                    <div class="admin-content-header">
+                        <h2>仪表盘</h2>
+                    </div>
+                    <p>欢迎来到瞬鲜达生鲜平台管理员面板。在这里您可以管理所有商品和用户。</p>
+                    <div style="margin-top: 20px;">
+                        <h3>快速统计</h3>
+                        <div style="display: flex; gap: 20px; margin-top: 10px;">
+                            <div style="flex: 1; background: #e3f2fd; padding: 20px; border-radius: 5px; text-align: center;">
+                                <h4>商品总数</h4>
+                                <p style="font-size: 24px; font-weight: bold; color: #2196F3;">2</p>
+                            </div>
+                            <div style="flex: 1; background: #f1f8e9; padding: 20px; border-radius: 5px; text-align: center;">
+                                <h4>特价商品</h4>
+                                <p style="font-size: 24px; font-weight: bold; color: #4CAF50;">1</p>
+                            </div>
+                            <div style="flex: 1; background: #fff3e0; padding: 20px; border-radius: 5px; text-align: center;">
+                                <h4>秒杀商品</h4>
+                                <p style="font-size: 24px; font-weight: bold; color: #FF9800;">0</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 产地直采管理模块 -->
+            <div class="admin-module" id="direct-sourcing-module">
+                <div class="admin-content">
+                    <div class="admin-content-header">
+                        <h2 id="direct-sourcing-title">产地直采管理</h2>
+                        <button class="btn" id="add-province-btn">添加省份</button>
+                    </div>
+                    
+                    <!-- 省份列表 -->
+                    <div id="provinces-list" style="margin-top: 20px;">
+                        <!-- 省份数据将通过JavaScript动态加载 -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 地方商品管理模态框 -->
+            <div id="local-product-modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 id="local-product-modal-title">添加地方商品</h3>
+                        <span class="modal-close" id="local-product-modal-close">&times;</span>
+                    </div>
+                    <form id="local-product-form" onsubmit="event.preventDefault(); saveLocalProduct(event);">
+                        <input type="hidden" id="local-product-id">
+                        <input type="hidden" id="local-product-province-id">
+                        
+                        <div class="form-group">
+                            <label for="local-product-name">商品名称</label>
+                            <input type="text" id="local-product-name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="local-product-price">价格</label>
+                            <input type="number" id="local-product-price" step="0.01" min="0" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="local-product-description">描述</label>
+                            <textarea id="local-product-description" rows="3"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="local-product-discount">折扣</label>
+                            <input type="number" id="local-product-discount" step="0.01" min="0.1" max="1" value="1">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="local-product-is-seasonal"> 当季商品
+                            </label>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="local-product-image">商品图片</label>
+                            <input type="file" id="local-product-image" accept="image/*">
+                            <div id="local-product-image-preview" style="margin-top: 10px;"></div>
+                            <input type="hidden" id="local-product-image-url">
+                        </div>
+                        
+                        <div class="modal-footer">
+                            <button type="button" class="btn" id="cancel-local-product-btn">取消</button>
+                            <button type="submit" class="btn success">保存</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- 用户管理模块 -->
+            <div class="admin-module" id="users-module">
+                <div class="admin-content">
+                    <div class="admin-content-header">
+                        <h2>用户管理</h2>
+                    </div>
+                    
+                    <!-- 管理员个人设置 -->
+                    <div style="margin-bottom: 30px; padding: 20px; background: #f8f9fa; border-radius: 5px;">
+                        <div>
+                            <h3>管理员设置</h3>
+                        </div>
+                        <div>
+                            <button class="btn" id="edit-admin-profile-btn">修改个人信息</button>
+                        </div>
+                    </div>
+                    
+                    <!-- 用户列表 -->
+                    <div>
+                        <h3>用户账户管理</h3>
+                        <div style="margin-top: 10px;">
+                            <input type="text" id="user-search" placeholder="搜索用户名或邮箱..." style="padding: 8px; width: 300px; margin-right: 10px;">
+                            <button class="btn" id="user-search-btn">搜索</button>
+                        </div>
+                        <table class="admin-table" style="margin-top: 15px;">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>用户名</th>
+                                    <th>邮箱</th>
+                                    <th>注册时间</th>
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-table-body">
+                                <!-- 用户数据将通过JavaScript动态加载 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 管理员个人信息编辑模态框 -->
+            <div id="admin-profile-modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>修改个人信息</h3>
+                        <span class="modal-close" id="admin-profile-modal-close">&times;</span>
+                    </div>
+                    <form id="admin-profile-form">
+                        <div class="form-group">
+                            <label for="admin-nickname">昵称</label>
+                            <input type="text" id="admin-nickname" placeholder="请输入昵称">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="admin-current-password">当前密码</label>
+                            <input type="password" id="admin-current-password" placeholder="请输入当前密码">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="admin-new-password">新密码</label>
+                            <input type="password" id="admin-new-password" placeholder="请输入新密码（留空表示不修改）">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="admin-confirm-password">确认新密码</label>
+                            <input type="password" id="admin-confirm-password" placeholder="请确认新密码">
+                        </div>
+                        
+                        <div class="modal-footer">
+                            <button type="button" class="btn" id="cancel-admin-profile-btn">取消</button>
+                            <button type="submit" class="btn success">保存修改</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- 用户编辑模态框 -->
+            <div id="user-edit-modal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 id="user-edit-modal-title">编辑用户</h3>
+                        <span class="modal-close" id="user-edit-modal-close">&times;</span>
+                    </div>
+                    <form id="user-edit-form">
+                        <input type="hidden" id="user-edit-id">
+                        
+                        <div class="form-group">
+                            <label for="user-edit-username">用户名</label>
+                            <input type="text" id="user-edit-username" readonly>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="user-edit-email">邮箱</label>
+                            <input type="email" id="user-edit-email">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="user-edit-status">状态</label>
+                            <select id="user-edit-status">
+                                <option value="active">活跃</option>
+                                <option value="inactive">禁用</option>
+                            </select>
+                        </div>
+                        
+                        <div class="modal-footer">
+                            <button type="button" class="btn" id="cancel-user-edit-btn">取消</button>
+                            <button type="submit" class="btn success">保存修改</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- 新鲜果蔬模块 -->
+            <div class="admin-module" id="freshProduce-module">
+                <div class="admin-content">
+                    <div class="admin-content-header">
+                        <h2>新鲜果蔬</h2>
+                        <button class="btn" onclick="openProductModal(null, 'freshProduce')">添加商品</button>
+                    </div>
+                    
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>商品名称</th>
+                                <th>图片</th>
+                                <th>价格</th>
+                                <th>库存</th>
+                                <th>特价</th>
+                                <th>秒杀</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="freshProduce-table-body">
+                            <!-- 商品数据将通过JavaScript动态加载 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- 肉禽蛋品模块 -->
+            <div class="admin-module" id="meatPoultry-module">
+                <div class="admin-content">
+                    <div class="admin-content-header">
+                        <h2>肉禽蛋品</h2>
+                        <button class="btn" onclick="openProductModal(null, 'meatPoultry')">添加商品</button>
+                    </div>
+                    
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>商品名称</th>
+                                <th>图片</th>
+                                <th>价格</th>
+                                <th>库存</th>
+                                <th>特价</th>
+                                <th>秒杀</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="meatPoultry-table-body">
+                            <!-- 商品数据将通过JavaScript动态加载 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- 水产海鲜模块 -->
+            <div class="admin-module" id="seafood-module">
+                <div class="admin-content">
+                    <div class="admin-content-header">
+                        <h2>水产海鲜</h2>
+                        <button class="btn" onclick="openProductModal(null, 'seafood')">添加商品</button>
+                    </div>
+                    
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>商品名称</th>
+                                <th>图片</th>
+                                <th>价格</th>
+                                <th>库存</th>
+                                <th>特价</th>
+                                <th>秒杀</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="seafood-table-body">
+                            <!-- 商品数据将通过JavaScript动态加载 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- 乳品面点模块 -->
+            <div class="admin-module" id="dairyBakery-module">
+                <div class="admin-content">
+                    <div class="admin-content-header">
+                        <h2>乳品面点</h2>
+                        <button class="btn" onclick="openProductModal(null, 'dairyBakery')">添加商品</button>
+                    </div>
+                    
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>商品名称</th>
+                                <th>图片</th>
+                                <th>价格</th>
+                                <th>库存</th>
+                                <th>特价</th>
+                                <th>秒杀</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dairyBakery-table-body">
+                            <!-- 商品数据将通过JavaScript动态加载 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- 豆制品/杂粮模块 -->
+            <div class="admin-module" id="beanProducts-module">
+                <div class="admin-content">
+                    <div class="admin-content-header">
+                        <h2>豆制品/杂粮</h2>
+                        <button class="btn" onclick="openProductModal(null, 'beanProducts')">添加商品</button>
+                    </div>
+                    
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>商品名称</th>
+                                <th>图片</th>
+                                <th>价格</th>
+                                <th>库存</th>
+                                <th>特价</th>
+                                <th>秒杀</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="beanProducts-table-body">
+                            <!-- 商品数据将通过JavaScript动态加载 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- 速食净菜模块 -->
+            <div class="admin-module" id="readyMeals-module">
+                <div class="admin-content">
+                    <div class="admin-content-header">
+                        <h2>速食净菜</h2>
+                        <button class="btn" onclick="openProductModal(null, 'readyMeals')">添加商品</button>
+                    </div>
+                    
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>商品名称</th>
+                                <th>图片</th>
+                                <th>价格</th>
+                                <th>库存</th>
+                                <th>特价</th>
+                                <th>秒杀</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="readyMeals-table-body">
+                            <!-- 商品数据将通过JavaScript动态加载 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- 今日特价模块 -->
+            <div class="admin-module" id="specialOffers-module">
+                <div class="admin-content">
+                    <div class="admin-content-header">
+                        <h2>今日特价</h2>
+                        <button class="btn" onclick="openProductModal(null)">添加特价商品</button>
+                    </div>
+                    
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>商品名称</th>
+                                <th>图片</th>
+                                <th>价格</th>
+                                <th>库存</th>
+                                <th>类别</th>
+                                <th>秒杀</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="specialOffers-table-body">
+                            <!-- 商品数据将通过JavaScript动态加载 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 添加/编辑商品模态框 -->
+    <div class="modal" id="product-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">添加商品</h3>
+                <span class="modal-close">&times;</span>
+            </div>
+            <form id="product-form">
+                <input type="hidden" id="product-id">
+                <div class="form-group">
+                    <label for="product-name">商品名称</label>
+                    <input type="text" id="product-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="product-category">商品分类</label>
+                    <select id="product-category" required>
+                        <option value="freshProduce">新鲜果蔬</option>
+                        <option value="meatPoultry">肉禽蛋品</option>
+                        <option value="seafood">水产海鲜</option>
+                        <option value="dairyBakery">乳品面点</option>
+                        <option value="beanProducts">豆制品/杂粮</option>
+                        <option value="readyMeals">速食净菜</option>
+                    </select>
+                </div>
+                
+                <!-- 肉禽蛋品子分类 -->
+                <div class="form-group" id="meatPoultry-subcategory-container" style="display: none;">
+                    <label for="meatPoultry-subcategory">肉禽蛋品子分类</label>
+                    <select id="meatPoultry-subcategory">
+                        <option value="pork">猪肉</option>
+                        <option value="beef">牛肉</option>
+                        <option value="chicken">鸡肉</option>
+                        <option value="duck">鸭肉</option>
+                        <option value="goose">鹅肉</option>
+                        <option value="egg">蛋类</option>
+                    </select>
+                </div>
+                
+                <!-- 肉禽蛋品温度类型 -->
+                <div class="form-group" id="meatPoultry-temperature-container" style="display: none;">
+                    <label for="meatPoultry-temperature">温度类型</label>
+                    <select id="meatPoultry-temperature">
+                        <option value="chilled">冷鲜肉类</option>
+                        <option value="frozen">冷冻肉类</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="product-price">价格</label>
+                        <input type="number" id="product-price" step="0.01" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="product-stock">库存</label>
+                        <input type="number" id="product-stock" min="0" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="product-image">商品图片</label>
+                    <input type="file" id="product-image" accept="image/*">
+                    <div id="image-preview" style="margin-top: 10px;"></div>
+                    <input type="hidden" id="product-image-url">
+                </div>
+                <div class="form-group">
+                    <label for="product-description">商品描述</label>
+                    <textarea id="product-description" rows="3"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="product-special-offer"> 特价商品
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="product-flash-sale"> 限时秒杀
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group" id="flash-sale-end-time-container" style="display: none;">
+                    <label for="product-flash-sale-end-time">秒杀结束时间</label>
+                    <input type="datetime-local" id="product-flash-sale-end-time" min="" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" id="cancel-product-btn">取消</button>
+                    <button type="submit" class="btn success">保存商品</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="scripts/api.js"></script>
+    <script>
+        // 声明全局变量，确保saveProduct函数可以访问到
+        let productModal;
+        let productForm;
+        let products = [];
+        
+        // 等待DOM加载完成
+        document.addEventListener('DOMContentLoaded', function() {
+            // 检查用户是否已登录（增加健壮性，防止异常的本地存储数据阻断脚本）
+            let currentUser = null;
+            try {
+                const rawUser = localStorage.getItem('user');
+                currentUser = rawUser ? JSON.parse(rawUser) : null;
+            } catch (error) {
+                console.warn('解析本地用户信息失败，自动清理并跳转登录', error);
+                localStorage.removeItem('user');
+            }
+            if (!currentUser || currentUser.role !== 'admin') {
+                window.location.href = 'admin-login.html';
+                return;
+            }
+            
+            // 当前模块（使用全局变量，确保switchModule函数可以访问）
+            window.currentModule = 'dashboard';
+            window.currentCategory = 'freshProduce';
+            let currentModule = window.currentModule;
+            let currentCategory = window.currentCategory;
+            
+            // DOM元素
+            const moduleLinks = document.querySelectorAll('.admin-sidebar-nav a[data-module]');
+            const logoutBtnPanel = document.getElementById('logout-btn-panel');
+            productModal = document.getElementById('product-modal');
+            productForm = document.getElementById('product-form');
+            const modalClose = document.querySelector('.modal-close');
+            const cancelProductBtn = document.getElementById('cancel-product-btn');
+            const imageInput = document.getElementById('product-image');
+            const imagePreview = document.getElementById('image-preview');
+        
+            // 调试：检查元素是否存在
+            console.log('导航链接数量:', moduleLinks.length);
+            console.log('退出登录按钮:', logoutBtnPanel ? '找到' : '未找到');
+        
+            // 绑定导航事件
+            if (moduleLinks.length === 0) {
+                console.error('未找到导航链接元素！');
+            } else {
+                moduleLinks.forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        const module = this.getAttribute('data-module');
+                        console.log('点击导航链接:', module);
+                        
+                        // 更新激活状态
+                        document.querySelectorAll('.admin-sidebar-nav a').forEach(a => {
+                            a.classList.remove('active');
+                        });
+                        this.classList.add('active');
+                        
+                        // 切换模块
+                        switchModule(module);
+                    });
+                });
+            }
+            
+            // 绑定退出登录事件
+            if (logoutBtnPanel) {
+                logoutBtnPanel.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('退出登录按钮被点击');
+                    localStorage.removeItem('user');
+                    window.location.href = 'admin-login.html';
+                });
+            } else {
+                console.error('未找到退出登录按钮！');
+            }
+            
+            // 绑定模态框关闭事件
+            modalClose.addEventListener('click', closeProductModal);
+            cancelProductBtn.addEventListener('click', closeProductModal);
+            
+            // 绑定图片选择事件
+            imageInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    // 验证图片类型
+                    const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+                    if (!validTypes.includes(file.type)) {
+                        alert('请选择有效的图片文件（JPEG、PNG、GIF、WebP）');
+                        return;
+                    }
+                    
+                    // 验证图片大小（限制为2MB）
+                    const maxSize = 2 * 1024 * 1024;
+                    if (file.size > maxSize) {
+                        alert('图片大小不能超过2MB');
+                        return;
+                    }
+                    
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        imagePreview.innerHTML = `<img src="${e.target.result}" style="max-width: 200px; max-height: 200px;">`;
+                        document.getElementById('product-image-url').value = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // 绑定分类选择事件，显示/隐藏肉禽蛋品子分类
+            document.getElementById('product-category').addEventListener('change', function() {
+                const category = this.value;
+                const meatPoultrySubcategoryContainer = document.getElementById('meatPoultry-subcategory-container');
+                const meatPoultryTemperatureContainer = document.getElementById('meatPoultry-temperature-container');
+                
+                if (category === 'meatPoultry') {
+                    meatPoultrySubcategoryContainer.style.display = 'block';
+                    meatPoultryTemperatureContainer.style.display = 'block';
+                } else {
+                    meatPoultrySubcategoryContainer.style.display = 'none';
+                    meatPoultryTemperatureContainer.style.display = 'none';
+                }
+            });
+            
+            // 绑定表单提交事件
+            productForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                console.log('表单提交事件触发');
+                try {
+                    await saveProduct();
+                    console.log('saveProduct函数执行完毕');
+                } catch (error) {
+                    console.error('saveProduct函数执行出错:', error);
+                }
+            });
+            
+            // 重新绑定所有添加商品按钮的事件
+            const addProductButtons = document.querySelectorAll('button[onclick*="openProductModal"]');
+            addProductButtons.forEach(button => {
+                button.removeAttribute('onclick');
+                button.addEventListener('click', function() {
+                    const category = this.getAttribute('data-category') || null;
+                    openProductModal(null, category);
+                });
+            });
+            
+            // 为所有添加商品按钮添加data-category属性
+            document.querySelector('#freshProduce-module .btn').setAttribute('data-category', 'freshProduce');
+            document.querySelector('#meatPoultry-module .btn').setAttribute('data-category', 'meatPoultry');
+            document.querySelector('#seafood-module .btn').setAttribute('data-category', 'seafood');
+            document.querySelector('#dairyBakery-module .btn').setAttribute('data-category', 'dairyBakery');
+            document.querySelector('#beanProducts-module .btn').setAttribute('data-category', 'beanProducts');
+            document.querySelector('#readyMeals-module .btn').setAttribute('data-category', 'readyMeals');
+            // 特价商品模块的按钮不需要category属性，所以不添加
+            
+            // 绑定秒杀复选框事件
+            document.getElementById('product-flash-sale').addEventListener('change', toggleFlashSaleEndTime);
+            
+            // 初始化数据，确保DOM完全加载后再获取商品数据
+            initializeData();
+        });
+        
+        // 切换模块函数
+        function switchModule(module) {
+            window.currentModule = module;
+            currentModule = module;
+            
+            // 隐藏所有模块
+            document.querySelectorAll('.admin-module').forEach(m => {
+                m.classList.remove('active');
+            });
+            
+            // 显示仪表盘或商品模块
+            if (module === 'dashboard') {
+                document.getElementById('dashboard-module').classList.add('active');
+            } else if (module === 'users') {
+                // 用户管理模块
+                document.getElementById('users-module').classList.add('active');
+                loadUsers(); // 加载用户列表
+            } else if (module === 'directSourcing') {
+                // 产地直采模块
+                document.getElementById('direct-sourcing-module').classList.add('active');
+                
+                // 加载省份数据
+                loadProvinces();
+            } else if (module === 'specialOffers' || module === 'flashSales') {
+                // 特价商品或秒杀商品模块
+                window.currentCategory = module;
+                currentCategory = module;
+                
+                // 显示对应模块
+                const moduleId = module + '-module';
+                const moduleElement = document.getElementById(moduleId);
+                if (moduleElement) {
+                    moduleElement.classList.add('active');
+                }
+                
+                // 加载商品数据
+                loadProducts(module);
+            } else {
+                // 商品管理模块
+                window.currentCategory = module;
+                currentCategory = module;
+                
+                // 显示对应模块
+                const moduleId = module + '-module';
+                const moduleElement = document.getElementById(moduleId);
+                if (moduleElement) {
+                    moduleElement.classList.add('active');
+                }
+                
+                // 加载商品数据
+                loadProducts(module);
+            }
+        }
+        
+        // 加载商品数据
+        function loadProducts(category = null) {
+            const targetCategory = category || window.currentCategory || 'freshProduce';
+            const targetModule = targetCategory === 'specialOffers' || targetCategory === 'flashSales' ? targetCategory : targetCategory;
+            const tableBodyId = targetModule + '-table-body';
+            const tableBody = document.getElementById(tableBodyId);
+            
+            if (!tableBody) return;
+            
+            // 过滤商品
+            let filteredProducts = [];
+            if (targetModule === 'specialOffers') {
+                filteredProducts = products.filter(p => p.isSpecialOffer);
+            } else if (targetModule === 'flashSales') {
+                filteredProducts = products.filter(p => p.isFlashSale);
+            } else {
+                filteredProducts = products.filter(p => p.category === targetCategory);
+            }
+            
+            // 渲染表格
+            if (filteredProducts.length === 0) {
+                // 显示友好的提示信息
+                tableBody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 20px; color: #666;">暂无${targetCategory === 'specialOffers' ? '特价商品' : targetCategory === 'flashSales' ? '秒杀商品' : '商品'}数据</td></tr>`;
+            } else {
+                tableBody.innerHTML = '';
+                filteredProducts.forEach(product => {
+                    const row = document.createElement('tr');
+                    
+                    // 特价和秒杀模块显示类别列，其他模块显示特价列
+                    let specialColumns = '';
+                    if (targetModule === 'specialOffers' || targetModule === 'flashSales') {
+                        const categoryNames = {
+                            'freshProduce': '新鲜果蔬',
+                            'meatPoultry': '肉禽蛋品',
+                            'seafood': '水产海鲜',
+                            'dairyBakery': '乳品面点',
+                            'beanProducts': '豆制品/杂粮',
+                            'readyMeals': '速食净菜'
+                        };
+                        specialColumns = `<td>${categoryNames[product.category] || product.category}</td>`;
+                    } else {
+                        specialColumns = `<td>${product.isSpecialOffer ? '是' : '否'}</td>`;
+                    }
+                    
+                    const safePrice = Number.isFinite(Number(product.price)) ? Number(product.price) : 0;
+                    const safeImage = product.image || 'https://via.placeholder.com/200?text=No+Image';
+                    
+                    row.innerHTML = `
+                        <td>${product.id}</td>
+                        <td>${product.name}</td>
+                        <td><img src="${safeImage}?t=${Date.now()}" alt="${product.name}" class="product-image"></td>
+                        <td>¥${safePrice.toFixed(2)}</td>
+                        <td>${product.stock}</td>
+                        ${specialColumns}
+                        <td>${product.isFlashSale ? '是' : '否'}</td>
+                        <td>
+                            <button class="btn edit-btn" data-id="${product.id}">编辑</button>
+                            <button class="btn danger delete-btn" data-id="${product.id}">删除</button>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            }
+            
+            // 绑定编辑和删除事件
+            document.querySelectorAll(`#${tableBodyId} .edit-btn`).forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    editProduct(id);
+                });
+            });
+            
+            document.querySelectorAll(`#${tableBodyId} .delete-btn`).forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const id = parseInt(this.getAttribute('data-id'));
+                    deleteProduct(id);
+                });
+            });
+        }
+        
+        // 打开商品模态框
+        function openProductModal(product = null, category = null) {
+            // 重置表单
+            productForm.reset();
+            document.getElementById('product-id').value = '';
+            document.getElementById('modal-title').textContent = '添加商品';
+            imagePreview.innerHTML = '';
+            
+            // 设置日期时间选择器的最小值为当前时间
+            const now = new Date();
+            const minDateTime = now.toISOString().slice(0, 16);
+            document.getElementById('product-flash-sale-end-time').min = minDateTime;
+            
+            // 如果传入了类别，设置类别选择框的值
+            if (category) {
+                document.getElementById('product-category').value = category;
+            }
+            
+            // 如果是编辑，填充表单数据
+            if (product) {
+                document.getElementById('product-id').value = product.id;
+                document.getElementById('product-name').value = product.name;
+                document.getElementById('product-category').value = product.category;
+                document.getElementById('product-price').value = product.price;
+                document.getElementById('product-stock').value = product.stock;
+                // 对于编辑模式，我们只显示预览而不设置文件输入
+                if (product.image) {
+                    imagePreview.innerHTML = `<img src="${product.image}" style="max-width: 200px; max-height: 200px;">`;
+                    document.getElementById('product-image-url').value = product.image;
+                }
+                document.getElementById('product-description').value = product.description;
+                document.getElementById('product-special-offer').checked = product.isSpecialOffer;
+                document.getElementById('product-flash-sale').checked = product.isFlashSale;
+                document.getElementById('modal-title').textContent = '编辑商品';
+                
+                // 设置秒杀结束时间
+                if (product.flashSaleEndTime) {
+                    document.getElementById('product-flash-sale-end-time').value = new Date(product.flashSaleEndTime).toISOString().slice(0, 16);
+                }
+            }
+            
+            // 显示或隐藏肉禽蛋品子分类和温度类型
+            const productCategory = document.getElementById('product-category').value;
+            const meatPoultrySubcategoryContainer = document.getElementById('meatPoultry-subcategory-container');
+            const meatPoultryTemperatureContainer = document.getElementById('meatPoultry-temperature-container');
+            
+            if (productCategory === 'meatPoultry') {
+                meatPoultrySubcategoryContainer.style.display = 'block';
+                meatPoultryTemperatureContainer.style.display = 'block';
+                
+                // 如果是编辑，设置子分类和温度类型（即使值为空）
+                if (product) {
+                    document.getElementById('meatPoultry-subcategory').value = product.subcategory || '';
+                    document.getElementById('meatPoultry-temperature').value = product.temperature || '';
+                }
+            } else {
+                meatPoultrySubcategoryContainer.style.display = 'none';
+                meatPoultryTemperatureContainer.style.display = 'none';
+            }
+            
+            // 显示或隐藏秒杀结束时间输入框
+            toggleFlashSaleEndTime();
+            
+            // 显示模态框
+            productModal.style.display = 'flex';
+        }
+        
+        // 切换秒杀结束时间输入框的显示
+        function toggleFlashSaleEndTime() {
+            const isFlashSale = document.getElementById('product-flash-sale').checked;
+            const endTimeContainer = document.getElementById('flash-sale-end-time-container');
+            
+            if (isFlashSale) {
+                endTimeContainer.style.display = 'block';
+                // 如果没有设置结束时间，默认设置为2小时后
+                if (!document.getElementById('product-flash-sale-end-time').value) {
+                    const twoHoursLater = new Date();
+                    twoHoursLater.setHours(twoHoursLater.getHours() + 2);
+                    document.getElementById('product-flash-sale-end-time').value = twoHoursLater.toISOString().slice(0, 16);
+                }
+            } else {
+                endTimeContainer.style.display = 'none';
+            }
+        }
+        
+        // 关闭商品模态框
+        function closeProductModal() {
+            productModal.style.display = 'none';
+        }
+        
+        // 编辑商品
+        function editProduct(id) {
+            const product = products.find(p => p.id === id);
+            if (product) {
+                openProductModal(product);
+            }
+        }
+        
+        // 删除商品
+        async function deleteProduct(id) {
+            if (confirm('确定要删除这个商品吗？')) {
+                try {
+                    // 先获取商品信息，以便知道它属于哪个类别
+                    const productToDelete = products.find(p => p.id === id);
+                    if (!productToDelete) {
+                        alert('商品不存在');
+                        return;
+                    }
+                    
+                    const response = await apiClient.deleteProduct(id);
+                    if (response.success) {
+                // 重新加载商品数据
+                const productsResponse = await apiClient.getAllProducts();
+                if (productsResponse.success) {
+                    products = productsResponse.products;
+                    
+                    // 重新加载相关模块的数据
+                    loadProducts(productToDelete.category);
+                    if (productToDelete.isSpecialOffer) {
+                        loadProducts('specialOffers');
+                    }
+                    
+                    // 更新仪表盘统计数据
+                    updateDashboardStats();
+                    
+                    // 通知所有前端页面刷新商品数据
+                    if (typeof BroadcastChannel !== 'undefined') {
+                        const channel = new BroadcastChannel('product-updates');
+                        channel.postMessage({ action: 'product-updated', timestamp: Date.now() });
+                        console.log('已发送商品更新通知');
+                    }
+                }
+            } else {
+                alert('删除失败: ' + response.message);
+            }
+                } catch (error) {
+                    console.error('删除商品失败:', error);
+                    alert('删除商品失败，请重试');
+                }
+            }
+        }
+        
+        // 保存商品
+        async function saveProduct() {
+            console.log('========== saveProduct函数开始执行 ==========');
+            
+            // 定义模态框关闭函数
+            function closeModal() {
+                console.log('强制关闭模态框');
+                productModal.style.display = 'none';
+            }
+            
+            try {
+                // 1. 获取商品ID
+                const id = document.getElementById('product-id').value;
+                console.log('商品ID:', id, '类型:', typeof id);
+                
+                // 2. 获取表单数据
+                const productNameInput = document.getElementById('product-name');
+                const productCategoryInput = document.getElementById('product-category');
+                const productPriceInput = document.getElementById('product-price');
+                const productStockInput = document.getElementById('product-stock');
+                const productImageUrlInput = document.getElementById('product-image-url');
+                const productDescriptionInput = document.getElementById('product-description');
+                const productSpecialOfferInput = document.getElementById('product-special-offer');
+                const productFlashSaleInput = document.getElementById('product-flash-sale');
+                const productFlashSaleEndTimeInput = document.getElementById('product-flash-sale-end-time');
+                
+                console.log('所有表单元素获取成功');
+                
+                // 3. 提取表单值
+                const productName = productNameInput.value;
+                const productCategory = productCategoryInput.value;
+                const productPrice = parseFloat(productPriceInput.value);
+                const productStock = parseInt(productStockInput.value);
+                const productImage = productImageUrlInput.value || 'https://picsum.photos/200/200';
+                const productDescription = productDescriptionInput.value;
+                const productSpecialOffer = productSpecialOfferInput.checked;
+                const productFlashSale = productFlashSaleInput.checked;
+                const productFlashSaleEndTime = productFlashSale ? 
+                    new Date(productFlashSaleEndTimeInput.value).toISOString() : null;
+                
+                console.log('表单数据提取完毕:', {
+                    productName,
+                    productCategory,
+                    productPrice,
+                    productStock,
+                    productImage: productImage.substring(0, 50) + (productImage.length > 50 ? '...' : ''), // 只显示前50个字符
+                    productSpecialOffer,
+                    productFlashSale
+                });
+                
+                // 4. 构建商品对象
+                const product = {
+                    name: productName,
+                    category: productCategory,
+                    price: productPrice,
+                    stock: productStock,
+                    image: productImage,
+                    description: productDescription,
+                    isSpecialOffer: productSpecialOffer,
+                    isFlashSale: productFlashSale,
+                    flashSaleEndTime: productFlashSaleEndTime,
+                    subcategory: null,
+                    temperature: null
+                };
+                
+                // 5. 根据商品分类添加相应的子分类和温度类型
+                if (product.category === 'meatPoultry') {
+                    console.log('肉禽蛋品，添加子分类和温度类型');
+                    const meatPoultrySubcategoryInput = document.getElementById('meatPoultry-subcategory');
+                    const meatPoultryTemperatureInput = document.getElementById('meatPoultry-temperature');
+                    
+                    if (meatPoultrySubcategoryInput && meatPoultryTemperatureInput) {
+                        const meatPoultrySubcategory = meatPoultrySubcategoryInput.value;
+                        const meatPoultryTemperature = meatPoultryTemperatureInput.value;
+                        
+                        console.log('肉禽蛋品子分类:', meatPoultrySubcategory);
+                        console.log('肉禽蛋品温度类型:', meatPoultryTemperature);
+                        
+                        product.subcategory = meatPoultrySubcategory;
+                        product.temperature = meatPoultryTemperature;
+                    }
+                }
+                
+                console.log('最终商品数据:', {
+                    ...product,
+                    image: product.image ? (product.image.substring(0, 50) + (product.image.length > 50 ? '...' : '')) : '无图片'
+                });
+                
+                // 6. 表单验证
+                const errors = [];
+                
+                if (!product.name || product.name.trim() === '') {
+                    errors.push('请填写商品名称');
+                }
+                
+                if (isNaN(productPrice) || productPrice <= 0) {
+                    errors.push('请填写有效的商品价格（大于0的数字）');
+                }
+                
+                if (isNaN(productStock) || productStock < 0) {
+                    errors.push('请填写有效的商品库存（大于等于0的数字）');
+                }
+                
+                if (product.isFlashSale && (!product.flashSaleEndTime || product.flashSaleEndTime.trim() === '')) {
+                    errors.push('请填写秒杀结束时间');
+                }
+                
+                if (product.isFlashSale && product.flashSaleEndTime) {
+                    const flashSaleEndTime = new Date(product.flashSaleEndTime);
+                    if (isNaN(flashSaleEndTime.getTime())) {
+                        errors.push('请填写有效的秒杀结束时间');
+                    } else if (flashSaleEndTime <= new Date()) {
+                        errors.push('秒杀结束时间必须大于当前时间');
+                    }
+                }
+                
+                if (errors.length > 0) {
+                    alert(errors.join('\n'));
+                    return;
+                }
+                
+                console.log('表单验证通过');
+                
+                // 7. 解析商品ID
+                const productId = parseInt(id);
+                const isUpdate = !isNaN(productId) && productId > 0;
+                console.log('是否更新商品:', isUpdate, '商品ID:', productId);
+                
+                // 8. 调用API
+                console.log('准备调用API...');
+                const response = isUpdate ? 
+                    await apiClient.updateProduct(productId, product) : 
+                    await apiClient.addProduct(product);
+                
+                console.log('API调用完成，响应:', response);
+                
+                // 9. 处理API响应
+                if (response && response.success) {
+                    console.log('API调用成功');
+                    alert('商品保存成功！');
+                    
+                    // 10. 重新加载商品数据
+                    console.log('准备重新加载商品数据...');
+                    const productsResponse = await apiClient.getAllProducts();
+                    
+                    if (productsResponse && productsResponse.success && Array.isArray(productsResponse.products)) {
+                        products = productsResponse.products;
+                        console.log('商品数据更新成功，共', products.length, '个商品');
+                        
+                        // 11. 重新加载所有商品模块的数据
+                        const categories = ['freshProduce', 'meatPoultry', 'seafood', 'dairyBakery', 'beanProducts', 'readyMeals'];
+                        categories.forEach(category => {
+                            console.log('重新加载分类:', category);
+                            loadProducts(category);
+                        });
+                        
+                        // 12. 重新加载特价和秒杀商品模块
+                        loadProducts('specialOffers');
+                        loadProducts('flashSales');
+                        
+                        // 13. 更新仪表盘统计数据
+                        updateDashboardStats();
+                    } else {
+                        console.warn('获取商品数据失败，跳过重新加载');
+                    }
+                    
+                    // 14. 通知所有前端页面刷新商品数据
+                    if (typeof BroadcastChannel !== 'undefined') {
+                        const channel = new BroadcastChannel('product-updates');
+                        channel.postMessage({ action: 'product-updated', timestamp: Date.now() });
+                        console.log('已发送商品更新通知到用户界面');
+                    }
+                    
+                    // 15. 关闭模态框
+                    closeModal();
+                } else {
+                    console.error('API调用失败:', response ? response.message : '未知错误');
+                    alert('商品保存失败: ' + (response ? response.message : '服务器未返回有效响应'));
+                }
+            } catch (error) {
+                console.error('保存商品过程中发生错误:', error);
+                console.error('错误堆栈:', error.stack);
+                alert('保存商品失败，请检查控制台获取详细信息');
+            } finally {
+                console.log('========== saveProduct函数执行完毕 ==========');
+            }
+        }
+        
+        // 更新仪表盘统计数据 - 完全重写，使用最简单的方式
+        function updateDashboardStats() {
+            console.log('更新仪表盘统计数据');
+            
+            // 直接从API获取所有商品，不依赖于任何本地数据
+            fetch('http://localhost:3001/api/products')
+                .then(response => response.json())
+                .then(data => {
+                    console.log('直接从API获取的商品数据:', data);
+                    
+                    if (data.success && Array.isArray(data.products)) {
+                        // 计算统计数据
+                        const totalProducts = data.products.length;
+                        const specialOfferProducts = data.products.filter(p => p.isSpecialOffer).length;
+                        const flashSaleProducts = data.products.filter(p => p.isFlashSale).length;
+                        
+                        console.log('直接从API计算的统计数据:', {
+                            totalProducts,
+                            specialOfferProducts,
+                            flashSaleProducts
+                        });
+                        
+                        // 强制更新本地products数组
+                        products = data.products;
+                        
+                        // 更新DOM元素 - 使用最简单的选择器，直接根据文本内容找到对应的统计卡片
+                        const statsCards = document.querySelectorAll('#dashboard-module .admin-content div > div > div');
+                        console.log('找到的统计卡片数量:', statsCards.length);
+                        
+                        statsCards.forEach(card => {
+                            const h4 = card.querySelector('h4');
+                            if (h4) {
+                                const p = card.querySelector('p');
+                                if (p) {
+                                    if (h4.textContent === '商品总数') {
+                                        p.textContent = totalProducts;
+                                        console.log('已更新商品总数:', totalProducts);
+                                    } else if (h4.textContent === '特价商品') {
+                                        p.textContent = specialOfferProducts;
+                                        console.log('已更新特价商品数:', specialOfferProducts);
+                                    } else if (h4.textContent === '秒杀商品') {
+                                        p.textContent = flashSaleProducts;
+                                        console.log('已更新秒杀商品数:', flashSaleProducts);
+                                    }
+                                }
+                            }
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('获取商品数据出错:', error);
+                });
+        }
+        
+        // 页面加载完成后获取商品数据
+        async function initializeData() {
+            try {
+                console.log('开始初始化数据...');
+                const response = await apiClient.getAllProducts();
+                console.log('获取商品数据响应:', response);
+                if (response.success && response.products && Array.isArray(response.products)) {
+                    products = response.products;
+                    console.log('商品数据:', products);
+                    
+                    // 为每个商品模块加载初始数据，添加flashSales分类
+                    const categories = ['freshProduce', 'meatPoultry', 'seafood', 'dairyBakery', 'beanProducts', 'readyMeals', 'specialOffers', 'flashSales'];
+                    categories.forEach(category => {
+                        console.log('加载分类数据:', category);
+                        loadProducts(category);
+                    });
+                    
+                    // 更新仪表盘统计数据
+                    updateDashboardStats();
+                } else {
+                    console.error('获取商品数据失败:', response.message || '未知错误');
+                    // 使用备用数据
+                    console.log('使用备用数据初始化商品列表...');
+                    useFallbackProducts();
+                }
+            } catch (error) {
+                console.error('获取商品数据失败:', error);
+                console.error('错误堆栈:', error.stack);
+                // 使用备用数据
+                console.log('使用备用数据初始化商品列表...');
+                useFallbackProducts();
+            }
+        }
+        
+        // 使用备用商品数据
+        function useFallbackProducts() {
+            // 生成包含所有分类的备用商品数据
+            products = [
+                {
+                    id: 1,
+                    name: '苹果',
+                    category: 'freshProduce',
+                    price: 9.99,
+                    stock: 100,
+                    image: 'https://picsum.photos/id/1080/200/200',
+                    description: '新鲜红苹果',
+                    isSpecialOffer: false,
+                    isFlashSale: false
+                },
+                {
+                    id: 2,
+                    name: '牛奶',
+                    category: 'dairyBakery',
+                    price: 5.99,
+                    stock: 50,
+                    image: 'https://picsum.photos/id/431/200/200',
+                    description: '纯牛奶',
+                    isSpecialOffer: true,
+                    isFlashSale: false
+                },
+                {
+                    id: 3,
+                    name: '鸡蛋',
+                    category: 'meatPoultry',
+                    price: 12.99,
+                    stock: 80,
+                    image: 'https://picsum.photos/id/1074/200/200',
+                    description: '新鲜鸡蛋',
+                    isSpecialOffer: false,
+                    isFlashSale: false
+                },
+                {
+                    id: 4,
+                    name: '速食净菜套餐',
+                    category: 'readyMeals',
+                    price: 19.99,
+                    stock: 30,
+                    image: 'https://picsum.photos/id/1025/200/200',
+                    description: '新鲜净菜，方便快捷',
+                    isSpecialOffer: false,
+                    isFlashSale: true
+                },
+                {
+                    id: 5,
+                    name: '豆腐',
+                    category: 'beanProducts',
+                    price: 3.99,
+                    stock: 60,
+                    image: 'https://picsum.photos/id/111/200/200',
+                    description: '新鲜豆腐',
+                    isSpecialOffer: false,
+                    isFlashSale: false
+                },
+                {
+                    id: 6,
+                    name: '鱼',
+                    category: 'seafood',
+                    price: 29.99,
+                    stock: 20,
+                    image: 'https://picsum.photos/id/1068/200/200',
+                    description: '新鲜鱼',
+                    isSpecialOffer: true,
+                    isFlashSale: false
+                }
+            ];
+            
+            // 为每个商品模块加载备用数据
+            const categories = ['freshProduce', 'meatPoultry', 'seafood', 'dairyBakery', 'beanProducts', 'readyMeals', 'specialOffers', 'flashSales'];
+            categories.forEach(category => {
+                console.log('使用备用数据加载分类:', category);
+                loadProducts(category);
+            });
+            
+            // 更新仪表盘统计数据
+            updateDashboardStats();
+        }
+        
+        // 产地直采相关功能
+        
+
+        
+        // DOM元素
+        const addProvinceBtn = document.getElementById('add-province-btn');
+        const provinceList = document.getElementById('provinces-list');
+        const localProductModal = document.getElementById('local-product-modal');
+        const localProductModalClose = document.getElementById('local-product-modal-close');
+        const cancelLocalProductBtn = document.getElementById('cancel-local-product-btn');
+        const localProductForm = document.getElementById('local-product-form');
+        const localProductImageInput = document.getElementById('local-product-image');
+        const localProductImagePreview = document.getElementById('local-product-image-preview');
+        
+        // 加载省份数据
+        async function loadProvinces() {
+            console.log('loadProvinces函数被调用');
+            try {
+                console.log('开始加载省份数据...');
+                provinceList.innerHTML = '<div class="loading">加载中...</div>';
+                
+                // 调用API获取所有省份
+                console.log('调用apiClient.getAllProvinces()...');
+                const response = await apiClient.getAllProvinces();
+                console.log('收到getAllProvinces响应:', response);
+                
+                if (response.success) {
+                    const provinces = response.provinces;
+                    provinceList.innerHTML = '';
+                    
+                    if (provinces.length === 0) {
+                        provinceList.innerHTML = '<div class="empty-state">暂无省份数据，请点击"添加省份"按钮添加</div>';
+                        return;
+                    }
+                    
+                    provinces.forEach(province => {
+                        const provinceCard = document.createElement('div');
+                        provinceCard.className = 'province-card';
+                        
+                        // 确保products数组存在
+                        const products = province.products || [];
+                        
+                        // 构建商品HTML
+                        const productHTML = products.map(product => {
+                            // 确保所有必要的属性都存在
+                            const image = product.image || 'https://via.placeholder.com/200x200?text=暂无图片';
+                            const name = product.name || '未知商品';
+                            const description = product.description || '暂无描述';
+                            const price = product.price || 0;
+                            const originalPrice = product.original_price || price;
+                            const isSeasonal = product.is_seasonal || product.isSeasonal || false;
+                            const id = product.id || 0;
+                            
+                            return `<div class="local-product-item">
+                                <img src="${image}" alt="${name}" class="local-product-image">
+                                <div class="local-product-info">
+                                    <h4>${name}</h4>
+                                    <p>${description}</p>
+                                    <p class="local-product-price">¥${price.toFixed(2)} ${originalPrice > price ? `(折扣: ${(price / originalPrice * 10).toFixed(1)}折)` : ''}</p>
+                                    <span class="local-product-tags">
+                                        ${isSeasonal ? '<span class="tag seasonal">当季</span>' : ''}
+                                    </span>
+                                </div>
+                                <div class="local-product-actions">
+                                    <button class="btn edit-local-product-btn" data-province-id="${province.id}" data-product-id="${id}">编辑</button>
+                                    <button class="btn danger delete-local-product-btn" data-province-id="${province.id}" data-product-id="${id}">删除</button>
+                                </div>
+                            </div>`;
+                        }).join('') || '<div class="empty-state">暂无地方商品，请点击"添加商品"按钮添加</div>';
+                        
+                        provinceCard.innerHTML = `
+                            <div class="province-header">
+                                <h3>${province.name}</h3>
+                                <button class="btn primary add-local-product-btn" data-province-id="${province.id}">添加商品</button>
+                            </div>
+                            <div class="local-products-list">
+                                ${productHTML}
+                            </div>
+                        `;
+                        provinceList.appendChild(provinceCard);
+                    });
+                    
+                    // 绑定添加地方商品事件
+                    document.querySelectorAll('.add-local-product-btn').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const provinceId = parseInt(this.getAttribute('data-province-id'));
+                            openLocalProductModal(null, provinceId);
+                        });
+                    });
+                    
+                    // 绑定编辑地方商品事件
+                    document.querySelectorAll('.edit-local-product-btn').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const provinceId = parseInt(this.getAttribute('data-province-id'));
+                            const productId = parseInt(this.getAttribute('data-product-id'));
+                            openLocalProductModal({ id: productId }, provinceId);
+                        });
+                    });
+                    
+                    // 绑定删除地方商品事件
+                    document.querySelectorAll('.delete-local-product-btn').forEach(btn => {
+                        btn.addEventListener('click', function() {
+                            const provinceId = parseInt(this.getAttribute('data-province-id'));
+                            const productId = parseInt(this.getAttribute('data-product-id'));
+                            
+                            if (confirm('确定要删除这个地方商品吗？')) {
+                                deleteLocalProduct(provinceId, productId);
+                            }
+                        });
+                    });
+                } else {
+                    provinceList.innerHTML = `<div class="error">加载失败: ${response.message}</div>`;
+                }
+            } catch (error) {
+                console.error('加载省份数据失败:', error);
+                provinceList.innerHTML = '<div class="error">加载失败，请刷新页面重试</div>';
+            }
+        }
+        
+        // 打开地方商品模态框
+        async function openLocalProductModal(product = null, provinceId) {
+            // 重置表单
+            localProductForm.reset();
+            document.getElementById('local-product-id').value = '';
+            document.getElementById('local-product-province-id').value = provinceId;
+            document.getElementById('local-product-modal-title').textContent = '添加地方商品';
+            localProductImagePreview.innerHTML = '';
+            
+            // 如果是编辑，获取并填充表单数据
+            if (product && product.id) {
+                try {
+                    // 显示加载状态
+                    localProductImagePreview.innerHTML = '<div class="loading">加载中...</div>';
+                    
+                    // 获取省份商品数据
+                    const response = await apiClient.getProvinceProducts(provinceId);
+                    
+                    if (response.success) {
+                        const productData = response.products.find(p => p.id === product.id);
+                        
+                        if (productData) {
+                                document.getElementById('local-product-id').value = productData.id;
+                                document.getElementById('local-product-name').value = productData.name;
+                                document.getElementById('local-product-price').value = productData.price;
+                                document.getElementById('local-product-description').value = productData.description;
+                                
+                                // 计算折扣（根据现价和原价）
+                                const discount = productData.original_price && productData.original_price > productData.price ? 
+                                    (productData.price / productData.original_price).toFixed(2) : 1;
+                                document.getElementById('local-product-discount').value = discount;
+                                
+                                document.getElementById('local-product-is-seasonal').checked = productData.isSeasonal;
+                                
+                                // 显示图片预览
+                                if (productData.image) {
+                                    localProductImagePreview.innerHTML = `<img src="${productData.image}" style="max-width: 200px; max-height: 200px;">`;
+                                    document.getElementById('local-product-image-url').value = productData.image;
+                                }
+                            
+                            document.getElementById('local-product-modal-title').textContent = '编辑地方商品';
+                        }
+                    }
+                } catch (error) {
+                    console.error('获取商品数据失败:', error);
+                    localProductImagePreview.innerHTML = '<div class="error">加载商品数据失败</div>';
+                }
+            }
+            
+            // 显示模态框
+            localProductModal.style.display = 'flex';
+        }
+        
+        // 关闭地方商品模态框
+        function closeLocalProductModal() {
+            localProductModal.style.display = 'none';
+        }
+        
+        // 保存地方商品
+        async function saveLocalProduct(e) {
+            console.log('saveLocalProduct函数被调用');
+            console.log('事件对象:', e);
+            e.preventDefault();
+            
+            const id = document.getElementById('local-product-id').value;
+            const provinceId = parseInt(document.getElementById('local-product-province-id').value);
+            console.log('商品ID:', id, '省份ID:', provinceId);
+            
+            // 从表单获取数据
+            const name = document.getElementById('local-product-name').value;
+            const price = parseFloat(document.getElementById('local-product-price').value);
+            const description = document.getElementById('local-product-description').value;
+            const discount = parseFloat(document.getElementById('local-product-discount').value);
+            const isSeasonal = document.getElementById('local-product-is-seasonal').checked;
+            const image = document.getElementById('local-product-image-url').value || 'https://picsum.photos/200/200';
+            
+            // 计算原价（根据折扣和现价反向计算）
+            const originalPrice = discount < 1 ? price / discount : price;
+            console.log('计算得到的原价:', originalPrice);
+            
+            // 构建商品数据对象
+            const productData = {
+                name: name,
+                price: price,
+                originalPrice: originalPrice,
+                description: description,
+                isSeasonal: isSeasonal,
+                image: image
+            };
+            
+            console.log('构建的商品数据:', productData);
+            
+            // 表单验证
+            console.log('开始表单验证...');
+            if (!name) {
+                console.error('表单验证失败: 商品名称为空');
+                alert('请填写商品名称');
+                return;
+            }
+            if (!price || isNaN(price) || price <= 0) {
+                console.error('表单验证失败: 价格无效', price);
+                alert('请填写有效的商品价格');
+                return;
+            }
+            if (!description) {
+                console.error('表单验证失败: 商品描述为空');
+                alert('请填写商品描述');
+                return;
+            }
+            console.log('表单验证通过');
+            
+            try {
+                console.log('开始API调用...');
+                let response;
+                
+                if (id) {
+                    console.log('调用apiClient.updateLocalProduct...');
+                    // 更新商品
+                    response = await apiClient.updateLocalProduct(provinceId, id, productData);
+                } else {
+                    console.log('调用apiClient.addLocalProduct...');
+                    // 添加新商品
+                    response = await apiClient.addLocalProduct(provinceId, productData);
+                }
+                console.log('API调用成功，响应:', response);
+                
+                if (response.success) {
+                    // 重新加载省份数据
+                    await loadProvinces();
+                    
+                    // 关闭模态框
+                    closeLocalProductModal();
+                    
+                    // 通知所有前端页面刷新商品数据
+                    if (typeof BroadcastChannel !== 'undefined') {
+                        const channel = new BroadcastChannel('product-updates');
+                        channel.postMessage({ action: 'product-updated', timestamp: Date.now() });
+                        console.log('已发送商品更新通知');
+                    }
+                } else {
+                    alert('操作失败: ' + response.message);
+                }
+            } catch (error) {
+                console.error('保存商品失败:', error);
+                alert('保存失败，请重试');
+            }
+        }
+        
+        // 绑定表单提交事件
+        localProductForm.addEventListener('submit', saveLocalProduct);
+        
+        // 删除地方商品
+        async function deleteLocalProduct(provinceId, productId) {
+            try {
+                const response = await apiClient.deleteLocalProduct(provinceId, productId);
+                
+                if (response.success) {
+                    // 重新加载省份数据
+                    await loadProvinces();
+                    
+                    // 通知所有前端页面刷新商品数据
+                    if (typeof BroadcastChannel !== 'undefined') {
+                        const channel = new BroadcastChannel('product-updates');
+                        channel.postMessage({ action: 'product-updated', timestamp: Date.now() });
+                        console.log('已发送商品更新通知');
+                    }
+                } else {
+                    alert('删除失败: ' + response.message);
+                }
+            } catch (error) {
+                console.error('删除商品失败:', error);
+                alert('删除失败，请重试');
+            }
+        }
+        
+        // 添加省份模态框
+        function createProvinceModal() {
+            // 检查模态框是否已存在
+            if (!document.getElementById('province-modal')) {
+                const modalHTML = `
+                <div id="province-modal" class="modal" style="display: none;">
+                    <div class="modal-content" style="width: 400px;">
+                        <div class="modal-header">
+                            <h3>添加省份</h3>
+                            <span class="modal-close" id="province-modal-close">&times;</span>
+                        </div>
+                        <form id="province-form">
+                            <div class="form-group">
+                                <label for="province-name">省份名称</label>
+                                <input type="text" id="province-name" required>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn" id="cancel-province-btn">取消</button>
+                                <button type="submit" class="btn success">确定</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>`;
+                document.body.insertAdjacentHTML('beforeend', modalHTML);
+                
+                // 绑定事件
+                document.getElementById('province-modal-close').addEventListener('click', closeProvinceModal);
+                document.getElementById('cancel-province-btn').addEventListener('click', closeProvinceModal);
+                document.getElementById('province-form').addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    const provinceName = document.getElementById('province-name').value;
+                    
+                    if (provinceName && provinceName.trim()) {
+                        try {
+                            console.log('准备调用apiClient.addProvince，参数:', {name: provinceName.trim()});
+                            const response = await apiClient.addProvince({
+                                name: provinceName.trim()
+                            });
+                            
+                            console.log('收到apiClient.addProvince响应:', response);
+                            
+                            if (response.success) {
+                                // 重新加载省份数据
+                                await loadProvinces();
+                                closeProvinceModal();
+                                
+                                // 通知所有前端页面刷新商品数据
+                                if (typeof BroadcastChannel !== 'undefined') {
+                                    const channel = new BroadcastChannel('product-updates');
+                                    channel.postMessage({ action: 'product-updated', timestamp: Date.now() });
+                                    console.log('已发送商品更新通知');
+                                }
+                            } else {
+                                console.error('添加省份失败，服务器返回:', response);
+                                alert('添加失败: ' + (response.message || '未知错误'));
+                            }
+                        } catch (error) {
+                            console.error('添加省份发生异常:', error);
+                            alert('添加失败，请重试。错误详情: ' + error.message);
+                        }
+                    }
+                });
+                
+                // 点击模态框外部关闭
+                window.addEventListener('click', function(e) {
+                    const modal = document.getElementById('province-modal');
+                    if (e.target === modal) {
+                        closeProvinceModal();
+                    }
+                });
+            }
+            
+            // 显示模态框
+            document.getElementById('province-modal').style.display = 'flex';
+            // 聚焦输入框
+            document.getElementById('province-name').focus();
+        }
+        
+        // 关闭省份模态框
+        function closeProvinceModal() {
+            const modal = document.getElementById('province-modal');
+            if (modal) {
+                modal.style.display = 'none';
+                // 重置表单
+                document.getElementById('province-form').reset();
+            }
+        }
+        
+        // 添加省份
+        function addProvince() {
+            createProvinceModal();
+        }
+        
+        // 绑定图片选择事件
+        localProductImageInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    localProductImagePreview.innerHTML = `<img src="${e.target.result}" style="max-width: 200px; max-height: 200px;">`;
+                    document.getElementById('local-product-image-url').value = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // 绑定事件
+        addProvinceBtn.addEventListener('click', addProvince);
+        localProductModalClose.addEventListener('click', closeLocalProductModal);
+        cancelLocalProductBtn.addEventListener('click', closeLocalProductModal);
+        
+        // 点击模态框外部关闭
+        window.addEventListener('click', function(e) {
+            if (e.target === localProductModal) {
+                closeLocalProductModal();
+            }
+        });
+        
+        // 模块切换处理
+        function handleModuleSwitch() {
+            const modules = document.querySelectorAll('.admin-module');
+            const navItems = document.querySelectorAll('.admin-sidebar-nav a');
+            
+            navItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // 移除所有活动状态
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    modules.forEach(module => module.classList.remove('active'));
+                    
+                    // 添加当前活动状态
+                    this.classList.add('active');
+                    const moduleId = this.getAttribute('data-module') === 'directSourcing' ? 'direct-sourcing-module' : this.getAttribute('data-module') + '-module';
+                    const activeModule = document.getElementById(moduleId);
+                    if (activeModule) {
+                        activeModule.classList.add('active');
+                    }
+                    
+                    // 如果是产地直采模块，加载省份数据
+                    if (moduleId === 'direct-sourcing-module') {
+                        loadProvinces();
+                    }
+                });
+            });
+        }
+        
+        // 加载用户数据
+        function loadUsers() {
+            const tableBody = document.getElementById('users-table-body');
+            if (!tableBody) return;
+            
+            // 显示加载状态
+            tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center;">加载中...</td></tr>';
+            
+            try {
+                // 模拟用户数据
+                const mockUsers = [
+                    { id: 1, username: '张三', email: 'zhangsan@example.com', registeredAt: '2025-11-01 10:30:00', status: 'active' },
+                    { id: 2, username: '李四', email: 'lisi@example.com', registeredAt: '2025-11-05 14:20:00', status: 'active' },
+                    { id: 3, username: '王五', email: 'wangwu@example.com', registeredAt: '2025-11-10 09:15:00', status: 'inactive' }
+                ];
+                
+                // 渲染用户表格
+                tableBody.innerHTML = '';
+                mockUsers.forEach(user => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${user.id}</td>
+                        <td>${user.username}</td>
+                        <td>${user.email}</td>
+                        <td>${user.registeredAt}</td>
+                        <td>${user.status === 'active' ? '<span style="color: green;">活跃</span>' : '<span style="color: red;">禁用</span>'}</td>
+                        <td>
+                            <button class="btn edit-btn" data-id="${user.id}">编辑</button>
+                            <button class="btn danger delete-btn" data-id="${user.id}">删除</button>
+                        </td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+                
+                // 绑定编辑和删除事件
+                document.querySelectorAll('#users-table-body .edit-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = parseInt(this.getAttribute('data-id'));
+                        editUser(id, mockUsers);
+                    });
+                });
+                
+                document.querySelectorAll('#users-table-body .delete-btn').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const id = parseInt(this.getAttribute('data-id'));
+                        deleteUser(id);
+                    });
+                });
+                
+            } catch (error) {
+                console.error('加载用户数据失败:', error);
+                tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: red;">加载失败，请重试</td></tr>';
+            }
+        }
+        
+        // 打开管理员个人信息编辑模态框
+        function openAdminProfileModal() {
+            const modal = document.getElementById('admin-profile-modal');
+            if (modal) {
+                modal.style.display = 'flex';
+                // 重置表单
+                document.getElementById('admin-profile-form').reset();
+            }
+        }
+        
+        // 关闭管理员个人信息编辑模态框
+        function closeAdminProfileModal() {
+            const modal = document.getElementById('admin-profile-modal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        }
+        
+        // 保存管理员个人信息
+        function saveAdminProfile(event) {
+            event.preventDefault();
+            
+            const nickname = document.getElementById('admin-nickname').value.trim();
+            const currentPassword = document.getElementById('admin-current-password').value;
+            const newPassword = document.getElementById('admin-new-password').value;
+            const confirmPassword = document.getElementById('admin-confirm-password').value;
+            
+            // 验证当前密码
+            if (!currentPassword) {
+                alert('请输入当前密码');
+                return;
+            }
+            
+            // 如果要修改密码，验证新密码
+            if (newPassword) {
+                if (newPassword.length < 6) {
+                    alert('新密码至少需要6个字符');
+                    return;
+                }
+                if (newPassword !== confirmPassword) {
+                    alert('两次输入的新密码不一致');
+                    return;
+                }
+            }
+            
+            try {
+                // 模拟保存成功
+                console.log('保存管理员信息:', { nickname, changePassword: !!newPassword });
+                alert('保存成功！');
+                closeAdminProfileModal();
+            } catch (error) {
+                console.error('保存管理员信息失败:', error);
+                alert('保存失败，请重试');
+            }
+        }
+        
+        // 编辑用户
+        function editUser(id, users) {
+            const user = users.find(u => u.id === id);
+            if (!user) {
+                alert('用户不存在');
+                return;
+            }
+            
+            // 填充表单
+            document.getElementById('user-edit-id').value = user.id;
+            document.getElementById('user-edit-username').value = user.username;
+            document.getElementById('user-edit-email').value = user.email;
+            document.getElementById('user-edit-status').value = user.status;
+            
+            // 显示模态框
+            document.getElementById('user-edit-modal').style.display = 'flex';
+        }
+        
+        // 关闭用户编辑模态框
+        function closeUserEditModal() {
+            document.getElementById('user-edit-modal').style.display = 'none';
+        }
+        
+        // 保存用户编辑
+        function saveUserEdit(event) {
+            event.preventDefault();
+            
+            const id = document.getElementById('user-edit-id').value;
+            const email = document.getElementById('user-edit-email').value.trim();
+            const status = document.getElementById('user-edit-status').value;
+            
+            // 验证邮箱
+            if (!email) {
+                alert('请输入邮箱');
+                return;
+            }
+            
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('请输入有效的邮箱地址');
+                return;
+            }
+            
+            try {
+                // 模拟保存成功
+                console.log('保存用户信息:', { id, email, status });
+                alert('保存成功！');
+                closeUserEditModal();
+                loadUsers(); // 重新加载用户列表
+            } catch (error) {
+                console.error('保存用户信息失败:', error);
+                alert('保存失败，请重试');
+            }
+        }
+        
+        // 删除用户
+        function deleteUser(id) {
+            if (confirm('确定要删除这个用户吗？此操作不可撤销。')) {
+                try {
+                    // 模拟删除成功
+                    console.log('删除用户:', id);
+                    alert('删除成功！');
+                    loadUsers(); // 重新加载用户列表
+                } catch (error) {
+                    console.error('删除用户失败:', error);
+                    alert('删除失败，请重试');
+                }
+            }
+        }
+        
+        // 注意：模块切换处理已在DOMContentLoaded事件中完成，不需要重复调用handleModuleSwitch()
+        
+        // 绑定管理员个人信息编辑事件
+        const editAdminProfileBtn = document.getElementById('edit-admin-profile-btn');
+        const adminProfileModalClose = document.getElementById('admin-profile-modal-close');
+        const cancelAdminProfileBtn = document.getElementById('cancel-admin-profile-btn');
+        const adminProfileForm = document.getElementById('admin-profile-form');
+        
+        if (editAdminProfileBtn) editAdminProfileBtn.addEventListener('click', openAdminProfileModal);
+        if (adminProfileModalClose) adminProfileModalClose.addEventListener('click', closeAdminProfileModal);
+        if (cancelAdminProfileBtn) cancelAdminProfileBtn.addEventListener('click', closeAdminProfileModal);
+        if (adminProfileForm) adminProfileForm.addEventListener('submit', saveAdminProfile);
+        
+        // 绑定用户编辑事件
+        const userEditModalClose = document.getElementById('user-edit-modal-close');
+        const cancelUserEditBtn = document.getElementById('cancel-user-edit-btn');
+        const userEditForm = document.getElementById('user-edit-form');
+        const userSearchBtn = document.getElementById('user-search-btn');
+        
+        if (userEditModalClose) userEditModalClose.addEventListener('click', closeUserEditModal);
+        if (cancelUserEditBtn) cancelUserEditBtn.addEventListener('click', closeUserEditModal);
+        if (userEditForm) userEditForm.addEventListener('submit', saveUserEdit);
+        if (userSearchBtn) userSearchBtn.addEventListener('click', function() {
+            const searchTerm = document.getElementById('user-search').value.trim().toLowerCase();
+            console.log('搜索用户:', searchTerm);
+            // 这里可以实现搜索逻辑
+            alert('搜索功能：' + searchTerm);
+        });
+        
+        // 点击模态框外部关闭
+        window.addEventListener('click', function(e) {
+            const adminModal = document.getElementById('admin-profile-modal');
+            const userModal = document.getElementById('user-edit-modal');
+            
+            if (e.target === adminModal) {
+                closeAdminProfileModal();
+            }
+            if (e.target === userModal) {
+                closeUserEditModal();
+            }
+        });
+        
+        // 确保添加省份按钮可用
+        if (addProvinceBtn) {
+            addProvinceBtn.disabled = false;
+            addProvinceBtn.style.pointerEvents = 'auto';
+        }
+        
+        // 检查初始状态
+        const directSourcingModule = document.getElementById('direct-sourcing-module');
+        
+        if (directSourcingModule && directSourcingModule.classList.contains('active')) {
+            // 初始就是产地直采模块时加载省份数据
+            loadProvinces();
+        }
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>速食净菜 - 生鲜商城</title>
+</head>
+<body>
+    <div id="ready-meals">
+        <div class="module-header">
+            <h2>速食净菜</h2>
+            <p>新鲜洗净，快手烹饪，15分钟搞定一餐</p>
+        </div>
+
+        <!-- 烹饪视频预览模态框 -->
+        <div class="video-modal">
+            <div class="modal-overlay"></div>
+            <div class="modal-content">
+                <button class="modal-close">X</button>
+                <div class="video-container">
+                    <video controls>
+                        <source src="cooking-video.mp4" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+        </div>
+
+        <!-- 净菜处理步骤模态框 -->
+        <div class="steps-modal">
+            <div class="modal-overlay"></div>
+            <div class="modal-content">
+                <button class="modal-close">X</button>
+                <h3>净菜处理流程</h3>
+                <div class="processing-steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">新鲜蔬菜采购，严格筛选品质</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">精细清洗，去除农药残留和杂质</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">切配包装，保持食材新鲜度</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">冷链运输，确保新鲜送达</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">5</div>
+                        <div class="step-content">品质检测，安全放心食用</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 速食净菜商品网格 -->
+        <div class="meals-grid" id="meals-grid">
+            <!-- 商品卡片 1 -->
+            <div class="product-card meal-card" data-id="meal-1">
+                <div class="product-image">
+                    <img src="images/meal1.jpg" alt="宫保鸡丁套餐" onerror="this.onerror=null;this.src='src/youji.jpg'">
+                    <div class="quick-meal-badge">快手套餐</div>
+                </div>
+                <div class="product-info">
+                    <h3>宫保鸡丁套餐</h3>
+                    <div class="meal-features">
+                        <span>烹饪时间: 12分钟</span>
+                        <span>食材: 鸡肉、花生、蔬菜</span>
+                    </div>
+                    <div class="product-meta">
+                        <span class="price">¥28.80</span>
+                        <span class="serving">2-3人份</span>
+                    </div>
+                    <div class="meal-actions">
+                        <button class="preview-video-btn action-btn">查看做法</button>
+                        <button class="processing-steps-btn action-btn">处理流程</button>
+                    </div>
+                    <button class="add-to-cart-btn">
+                        <svg>
+                            <path d="M6 2L3 6V20C3 20.5304 3.21071 21.0391 3.58579 21.4142C3.96086 21.7893 4.46957 22 5 22H19C19.5304 22 20.0391 21.7893 20.4142 21.4142C20.7893 21.0391 21 20.5304 21 20V6L18 2H6Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M3 6H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M16 10C16 11.0609 15.5786 12.0783 14.8284 12.8284C14.0783 13.5786 13.0609 14 12 14C10.9391 14 9.92172 13.5786 9.17157 12.8284C8.42143 12.0783 8 11.0609 8 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                        加入购物车
+                    </button>
+                </div>
+            </div>
+
+            <!-- 商品卡片 2 -->
+            <div class="product-card meal-card" data-id="meal-2">
+                <div class="product-image">
+                    <img src="images/meal2.jpg" alt="鱼香肉丝套餐" onerror="this.onerror=null;this.src='src/youji.jpg'">
+                    <div class="quick-meal-badge">快手套餐</div>
+                </div>
+                <div class="product-info">
+                    <h3>鱼香肉丝套餐</h3>
+                    <div class="meal-features">
+                        <span>烹饪时间: 10分钟</span>
+                        <span>食材: 猪肉、木耳、胡萝卜</span>
+                    </div>
+                    <div class="product-meta">
+                        <span class="price">¥25.80</span>
+                        <span class="serving">2人份</span>
+                    </div>
+                    <div class="meal-actions">
+                        <button class="preview-video-btn action-btn">查看做法</button>
+                        <button class="processing-steps-btn action-btn">处理流程</button>
+                    </div>
+                    <button class="add-to-cart-btn">
+                        <svg>
+                            <path d="M6 2L3 6V20C3 20.5304 3.21071 21.0391 3.58579 21.4142C3.96086 21.7893 4.46957 22 5 22H19C19.5304 22 20.0391 21.7893 20.4142 21.4142C20.7893 21.0391 21 20.5304 21 20V6L18 2H6Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M3 6H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M16 10C16 11.0609 15.5786 12.0783 14.8284 12.8284C14.0783 13.5786 13.0609 14 12 14C10.9391 14 9.92172 13.5786 9.17157 12.8284C8.42143 12.0783 8 11.0609 8 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                        加入购物车
+                    </button>
+                </div>
+            </div>
+
+            <!-- 商品卡片 3 -->
+            <div class="product-card meal-card" data-id="meal-3">
+                <div class="product-image">
+                    <img src="images/meal3.jpg" alt="糖醋排骨套餐" onerror="this.onerror=null;this.src='src/youji.jpg'">
+                    <div class="quick-meal-badge">快手套餐</div>
+                </div>
+                <div class="product-info">
+                    <h3>糖醋排骨套餐</h3>
+                    <div class="meal-features">
+                        <span>烹饪时间: 15分钟</span>
+                        <span>食材: 猪排骨、糖醋汁、蔬菜</span>
+                    </div>
+                    <div class="product-meta">
+                        <span class="price">¥32.80</span>
+                        <span class="serving">3人份</span>
+                    </div>
+                    <div class="meal-actions">
+                        <button class="preview-video-btn action-btn">查看做法</button>
+                        <button class="processing-steps-btn action-btn">处理流程</button>
+                    </div>
+                    <button class="add-to-cart-btn">
+                        <svg>
+                            <path d="M6 2L3 6V20C3 20.5304 3.21071 21.0391 3.58579 21.4142C3.96086 21.7893 4.46957 22 5 22H19C19.5304 22 20.0391 21.7893 20.4142 21.4142C20.7893 21.0391 21 20.5304 21 20V6L18 2H6Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M3 6H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M16 10C16 11.0609 15.5786 12.0783 14.8284 12.8284C14.0783 13.5786 13.0609 14 12 14C10.9391 14 9.92172 13.5786 9.17157 12.8284C8.42143 12.0783 8 11.0609 8 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                        加入购物车
+                    </button>
+                </div>
+            </div>
+
+            <!-- 商品卡片 4 -->
+            <div class="product-card meal-card" data-id="meal-4">
+                <div class="product-image">
+                    <img src="images/meal4.jpg" alt="麻辣香锅套餐" onerror="this.onerror=null;this.src='src/youji.jpg'">
+                    <div class="quick-meal-badge">快手套餐</div>
+                </div>
+                <div class="product-info">
+                    <h3>麻辣香锅套餐</h3>
+                    <div class="meal-features">
+                        <span>烹饪时间: 18分钟</span>
+                        <span>食材: 多种蔬菜、肉类、香料</span>
+                    </div>
+                    <div class="product-meta">
+                        <span class="price">¥38.80</span>
+                        <span class="serving">3-4人份</span>
+                    </div>
+                    <div class="meal-actions">
+                        <button class="preview-video-btn action-btn">查看做法</button>
+                        <button class="processing-steps-btn action-btn">处理流程</button>
+                    </div>
+                    <button class="add-to-cart-btn">
+                        <svg>
+                            <path d="M6 2L3 6V20C3 20.5304 3.21071 21.0391 3.58579 21.4142C3.96086 21.7893 4.46957 22 5 22H19C19.5304 22 20.0391 21.7893 20.4142 21.4142C20.7893 21.0391 21 20.5304 21 20V6L18 2H6Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M3 6H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M16 10C16 11.0609 15.5786 12.0783 14.8284 12.8284C14.0783 13.5786 13.0609 14 12 14C10.9391 14 9.92172 13.5786 9.17157 12.8284C8.42143 12.0783 8 11.0609 8 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                        加入购物车
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 错误信息显示 -->
+        <div class="error-message">加载商品数据失败</div>
+    </div>
+</body>
+</html>

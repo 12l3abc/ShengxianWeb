@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>瞬鲜达 - 登录</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .login-header h2 {
+            color: #4CAF50;
+            margin-bottom: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .form-group input:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #45a049;
+        }
+        
+        .btn.admin {
+            background: #2196F3;
+        }
+        
+        .btn.admin:hover {
+            background: #1976D2;
+        }
+        
+        .switch-form {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .switch-form a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+        
+        .switch-form a:hover {
+            text-decoration: underline;
+        }
+        
+        .error-message {
+            color: #f44336;
+            text-align: center;
+            margin-bottom: 15px;
+            display: none;
+        }
+        
+        .form-title {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <h2>瞬鲜达生鲜平台</h2>
+            <p>登录您的账户</p>
+        </div>
+        
+        <div class="error-message" id="error-message"></div>
+        
+        <form id="login-form">
+            <div class="form-group">
+                <label for="username">用户名</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">密码</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            
+            <button type="submit" class="btn">登录</button>
+            
+            <div class="switch-form">
+                <p>还没有账户？<a href="register.html">立即注册</a></p>
+                <p>管理员登录？<a href="admin-login.html">管理员入口</a></p>
+            </div>
+        </form>
+    </div>
+
+    <script src="scripts/api-simple.js"></script>
+    <script>
+        document.getElementById('login-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                console.log('=== 普通用户登录尝试 ===');
+                console.log('登录凭据:', { username, password: '***' });
+                
+                // 使用简化版API客户端
+                const response = await simpleApiClient.login(username, password);
+                
+                console.log('登录响应:', response);
+                
+                if (response.success) {
+                    // 登录成功
+                    // 确保用户信息正确存储
+                    const userInfo = response.user || { username, role: 'user' };
+                    localStorage.setItem('user', JSON.stringify(userInfo));
+                    console.log('存储的用户信息:', userInfo);
+                    
+                    if (userInfo.role === 'admin') {
+                        // 管理员登录
+                        window.location.href = 'admin.html';
+                    } else {
+                        // 普通用户登录
+                        window.location.href = 'index.html';
+                    }
+                } else {
+                    // 登录失败
+                    const errorMessage = document.getElementById('error-message');
+                    errorMessage.textContent = response.message || '登录失败，请检查用户名和密码';
+                    errorMessage.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('登录失败:', error);
+                console.error('错误名称:', error.name);
+                console.error('错误堆栈:', error.stack);
+                const errorMessage = document.getElementById('error-message');
+                errorMessage.textContent = '网络请求失败: ' + error.message;
+                errorMessage.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#FFA500">
+  <!-- 购物车主体 -->
+  <path d="M3,3 L6,3 L7,9 L18,9 L19,3 L22,3 L21,10 L6,10 L5,4 L3,4 Z" fill="#FFA500"/>
+  <!-- 购物车把手 -->
+  <path d="M4,10 L5,13 L17,13 L18,10" fill="#FFA500"/>
+  <!-- 购物车底部 -->
+  <path d="M4,10 L18,10" stroke="#FFA500" stroke-width="0.5"/>
+  <!-- 左侧轮子 -->
+  <circle cx="7" cy="15" r="2" fill="#FFA500"/>
+  <circle cx="7" cy="15" r="0.5" fill="white"/>
+  <!-- 右侧轮子 -->
+  <circle cx="15" cy="15" r="2" fill="#FFA500"/>
+  <circle cx="15" cy="15" r="0.5" fill="white"/>
+</svg>

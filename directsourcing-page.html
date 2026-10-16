@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>产地直采 - 生鲜商城</title>
+</head>
+<body>
+    <div id="direct-sourcing">
+        <h2>产地直采</h2>
+        <p>当季直采蔬果，价格比市场低20-30%</p>
+        
+        <!-- 中国地图交互区域 -->
+        <div id="china-map">
+            <svg viewBox="0 0 800 600" id="map-svg">
+                <!-- 省份气泡 (动态生成) -->
+                <circle class="province-bubble" data-province="山东" cx="350" cy="250" r="30" />
+                <circle class="province-bubble" data-province="浙江" cx="450" cy="200" r="25" />
+                <circle class="province-bubble" data-province="福建" cx="480" cy="280" r="20" />
+                <circle class="province-bubble" data-province="四川" cx="280" cy="350" r="35" />
+                <circle class="province-bubble" data-province="云南" cx="320" cy="420" r="30" />
+                <circle class="province-bubble" data-province="新疆" cx="150" cy="200" r="40" />
+            </svg>
+        </div>
+
+        <!-- 省地质采信息弹窗 (动态生成) -->
+        <div class="province-popup">
+            <div class="popup-arrow"></div>
+            <h4>XX省直采</h4>
+            <div class="popup-products">特色商品: 暂无特色商品</div>
+            <div class="popup-discount">比市场价低0%</div>
+            <button class="view-products-btn" data-province="XX省">查看商品</button>
+        </div>
+
+        <!-- 拼团效果区域 -->
+        <div class="group-buying">
+            <h3>限时拼团，立省更多</h3>
+            <div class="group-progress">
+                <div class="progress-bar-container">
+                    <div class="progress-bar" style="width: 33%"></div>
+                </div>
+            </div>
+            <div class="group-discount">当前折扣: 20% | 拼单后: 25%</div>
+            <button class="join-group-btn">立即参团</button>
+        </div>
+
+        <!-- 当季产品效果区域 -->
+        <div class="seasonal-products">
+            <h3>当季精选产品</h3>
+            <div class="products-grid">
+                <!-- 产品卡片 1 -->
+                <div class="product-card">
+                    <img src="images/product1.jpg" alt="产品1">
+                    <div class="product-labels">
+                        <span class="seasonal-badge floating">当季</span>
+                    </div>
+                    <h4>产品名称</h4>
+                    <div class="season-indicator spring">春季</div>
+                    <p>产品描述文本，描述产品的特点和优势</p>
+                    <div class="product-pricing">
+                        <span style="text-decoration: line-through; color: #888;">¥50.00</span>
+                        <span class="discount-price" style="color: #e53935; font-weight: 700; font-size: 16px;">¥35.00</span>
+                    </div>
+                    <button class="add-to-cart-btn">加入购物车</button>
+                </div>
+
+                <!-- 产品卡片 2 -->
+                <div class="product-card">
+                    <img src="images/product2.jpg" alt="产品2">
+                    <h4>产品名称</h4>
+                    <p>产品描述文本，描述产品的特点和优势</p>
+                    <div class="product-pricing">
+                        <span style="color: #333; font-weight: 700; font-size: 16px;">¥28.00</span>
+                    </div>
+                    <button class="add-to-cart-btn">加入购物车</button>
+                </div>
+
+                <!-- 产品卡片 3 -->
+                <div class="product-card">
+                    <img src="images/product3.jpg" alt="产品3">
+                    <div class="product-labels">
+                        <span class="seasonal-badge floating">推荐</span>
+                    </div>
+                    <h4>产品名称</h4>
+                    <p>产品描述文本，描述产品的特点和优势</p>
+                    <div class="product-pricing">
+                        <span style="text-decoration: line-through; color: #888;">¥45.00</span>
+                        <span class="discount-price" style="color: #e53935; font-weight: 700; font-size: 16px;">¥32.00</span>
+                    </div>
+                    <button class="add-to-cart-btn">加入购物车</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 产品详情模态框 -->
+        <div class="product-detail-modal">
+            <div class="modal-content">
+                <button class="modal-close">X</button>
+                <h3>产品详情</h3>
+                <img src="images/product-detail.jpg" alt="产品详情">
+                <p>产品详细描述...</p>
+                <div class="modal-pricing">
+                    <span style="text-decoration: line-through; color: #999; margin-right: 10px;">¥100.00</span>
+                    <span style="font-size: 24px; color: #ff5722; font-weight: bold;">¥75.00</span>
+                    <span style="background: #ff5722; color: white; padding: 2px 8px; border-radius: 4px; margin-left: 10px; font-size: 14px;">省25%</span>
+                </div>
+                <button class="modal-add-to-cart">加入购物车</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

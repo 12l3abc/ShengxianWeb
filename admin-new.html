@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>瞬鲜达 - 管理员面板</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+        
+        .admin-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* 垂直导航栏样式 */
+        .admin-sidebar {
+            width: 250px;
+            background: #2c3e50;
+            color: white;
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+        }
+        
+        .admin-sidebar-header {
+            padding: 20px;
+            background: #1a252f;
+            text-align: center;
+        }
+        
+        .admin-sidebar-header h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+        
+        .admin-sidebar-nav {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .admin-sidebar-nav li {
+            border-bottom: 1px solid #34495e;
+        }
+        
+        .admin-sidebar-nav a {
+            display: block;
+            padding: 15px 20px;
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .admin-sidebar-nav a:hover,
+        .admin-sidebar-nav a.active {
+            background: #34495e;
+            color: white;
+            border-left: 4px solid #3498db;
+        }
+        
+        /* 主内容区域 */
+        .admin-main {
+            flex: 1;
+            margin-left: 250px;
+            padding: 20px;
+        }
+        
+        .admin-header {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .admin-header h1 {
+            color: #2c3e50;
+            font-size: 24px;
+        }
+        
+        .admin-content {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .admin-content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .admin-content-header h2 {
+            color: #2c3e50;
+        }
+        
+        .btn {
+            padding: 10px 15px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #2980b9;
+        }
+        
+        .btn.success {
+            background: #27ae60;
+        }
+        
+        .btn.success:hover {
+            background: #229954;
+        }
+        
+        .btn.danger {
+            background: #e74c3c;
+        }
+        
+        .btn.danger:hover {
+            background: #c0392b;
+        }
+        
+        /* 表格样式 */
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .admin-table th,
+        .admin-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .admin-table th {
+            background: #f8f9fa;
+            font-weight: bold;
+        }
+        
+        .admin-table tr:hover {
+            background: #f5f5f5;
+        }
+        
+        /* 表单样式 */
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        /* 隐藏所有模块，除了默认显示的 */
+        .admin-module {
+            display: none;
+        }
+        
+        .admin-module.active {
+            display: block;
+        }
+        
+        /* 商品图片样式 */
+        .product-image {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 3px;
+        }
+        
+        /* 模态框样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-header h3 {
+            margin: 0;
+        }
+        
+        .modal-close {
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+        
+        .modal-close:hover {
+            color: #333;
+        }
+        
+        .modal-footer {
+            margin-top: 20px;
+            text-align: right;
+        }
+        
+        #image-preview {
+            margin-top: 10px;
+        }
+        
+        #image-preview img {
+            max-width: 200px;
+            max-height: 200px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- 垂直导航栏 -->
+        <div class="admin-sidebar">
+            <div class="admin-sidebar-header">
+                <h2>管理员面板</h2>
+            </div>
+            <ul class="admin-sidebar-nav" id="sidebar-nav">
+                <li><a href="#" class="nav-link active" data-module="dashboard">仪表盘</a></li>
+                <li><a href="#" class="nav-link" data-module="freshProduce">新鲜果蔬</a></li>
+                <li><a href="#" class="nav-link" data-module="meatPoultry">肉禽蛋品</a></li>
+                <li><a href="#" class="nav-link" data-module="seafood">水产海鲜</a></li>
+                <li><a href="#" class="nav-link" data-module="dairyBakery">乳品面点</a></li>
+                <li><a href="#" class="nav-link" data-module="beanProducts">豆制品/杂粮</a></li>
+                <li><a href="#" class="nav-link" data-module="readyMeals">速食净菜</a></li>
+                <li><a href="#" class="nav-link" data-module="specialOffers">今日特价</a></li>
+                <li><a href="#" class="nav-link" data-module="directSourcing">产地直采</a></li>
+                <li><a href="#" class="nav-link" data-module="users">用户管理</a></li>
+            </ul>
+        </div>
+        
+        <!-- 主内容区域 -->
+        <div class="admin-main">
+            <div class="admin-header">
+                <h1>管理员面板</h1>
+                <button class="btn danger" id="logout-btn">退出登录</button>
+            </div>
+            
+            <!-- 仪表盘模块 -->
+            <div class="admin-module active" id="dashboard-module">
+                <div class="admin-content">
+                    <div class="admin-content-header">
+                        <h2>仪表盘</h2>
+                    </div>
+                    <p>欢迎来到瞬鲜达生鲜平台管理员面板。</p>
+                    <div style="margin-top: 20px;">
+                        <h3>快速统计</h3>
+                        <div style="display: flex; gap: 20px; margin-top: 10px;">
+                            <div style="flex: 1; background: #e3f2fd; padding: 20px; border-radius: 5px; text-align: center;">
+                                <h4>商品总数</h4>
+                                <p style="font-size: 24px; font-weight: bold; color: #2196F3;" id="total-products">0</p>
+                            </div>
+                            <div style="flex: 1; background: #f1f8e9; padding: 20px; border-radius: 5px; text-align: center;">
+                                <h4>特价商品</h4>
+                                <p style="font-size: 24px; font-weight: bold; color: #4CAF50;" id="special-offers-count">0</p>
+                            </div>
+                            <div style="flex: 1; background: #fff3e0; padding: 20px; border-radius: 5px; text-align: center;">
+                                <h4>秒杀商品</h4>
+                                <p style="font-size: 24px; font-weight: bold; color: #FF9800;" id="flash-sales-count">0</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 商品管理模块 -->
+            <div class="admin-module" id="freshProduce-module">
+                <div class="admin-content">
+                    <div class="admin-content-header">
+                        <h2>新鲜果蔬</h2>
+                        <button class="btn" onclick="AdminManager.openProductModal(null, 'freshProduce')">添加商品</button>
+                    </div>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>商品名称</th>
+                                <th>图片</th>
+                                <th>价格</th>
+                                <th>库存</th>
+                                <th>特价</th>
+                                <th>秒杀</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="freshProduce-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="admin-module" id="meatPoultry-module">
+                <div class="admin-content">
+                    <div class="admin-content-header">
+                        <h2>肉禽蛋品</h2>
+                        <button class="btn" onclick="AdminManager.openProductModal(null, 'meatPoultry')">添加商品</button>
+                    </div>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>商品名称</th>
+                                <th>图片</th>
+                                <th>价格</th>
+                                <th>库存</th>
+                                <th>特价</th>
+                                <th>秒杀</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="meatPoultry-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="admin-module" id="seafood-module">
+                <div class="admin-content">
+                    <div class="admin-content-header">
+                        <h2>水产海鲜</h2>
+                        <button class="btn" onclick="AdminManager.openProductModal(null, 'seafood')">添加商品</button>
+                    </div>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>商品名称</th>
+                                <th>图片</th>
+                                <th>价格</th>
+                                <th>库存</th>
+                                <th>特价</th>
+                                <th>秒杀</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="seafood-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="admin-module" id="dairyBakery-module">
+                <div class="admin-content">
+                    <div class="admin-content-header">
+                        <h2>乳品面点</h2>
+                        <button class="btn" onclick="AdminManager.openProductModal(null, 'dairyBakery')">添加商品</button>
+                    </div>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>商品名称</th>
+                                <th>图片</th>
+                                <th>价格</th>
+                                <th>库存</th>
+                                <th>特价</th>
+                                <th>秒杀</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dairyBakery-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="admin-module" id="beanProducts-module">
+                <div class="admin-content">
+                    <div class="admin-content-header">
+                        <h2>豆制品/杂粮</h2>
+                        <button class="btn" onclick="AdminManager.openProductModal(null, 'beanProducts')">添加商品</button>
+                    </div>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>商品名称</th>
+                                <th>图片</th>
+                                <th>价格</th>
+                                <th>库存</th>
+                                <th>特价</th>
+                                <th>秒杀</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="beanProducts-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="admin-module" id="readyMeals-module">
+                <div class="admin-content">
+                    <div class="admin-content-header">
+                        <h2>速食净菜</h2>
+                        <button class="btn" onclick="AdminManager.openProductModal(null, 'readyMeals')">添加商品</button>
+                    </div>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>商品名称</th>
+                                <th>图片</th>
+                                <th>价格</th>
+                                <th>库存</th>
+                                <th>特价</th>
+                                <th>秒杀</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="readyMeals-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="admin-module" id="specialOffers-module">
+                <div class="admin-content">
+                    <div class="admin-content-header">
+                        <h2>今日特价</h2>
+                    </div>
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>商品名称</th>
+                                <th>图片</th>
+                                <th>价格</th>
+                                <th>库存</th>
+                                <th>类别</th>
+                                <th>秒杀</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="specialOffers-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- 其他模块占位 -->
+            <div class="admin-module" id="directSourcing-module">
+                <div class="admin-content">
+                    <h2>产地直采</h2>
+                    <p>功能开发中...</p>
+                </div>
+            </div>
+            
+            <div class="admin-module" id="users-module">
+                <div class="admin-content">
+                    <h2>用户管理</h2>
+                    <p>功能开发中...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 商品编辑模态框 -->
+    <div class="modal" id="product-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">添加商品</h3>
+                <span class="modal-close" id="modal-close">&times;</span>
+            </div>
+            <form id="product-form">
+                <input type="hidden" id="product-id">
+                <div class="form-group">
+                    <label for="product-name">商品名称 *</label>
+                    <input type="text" id="product-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="product-category">商品分类 *</label>
+                    <select id="product-category" required>
+                        <option value="freshProduce">新鲜果蔬</option>
+                        <option value="meatPoultry">肉禽蛋品</option>
+                        <option value="seafood">水产海鲜</option>
+                        <option value="dairyBakery">乳品面点</option>
+                        <option value="beanProducts">豆制品/杂粮</option>
+                        <option value="readyMeals">速食净菜</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="product-price">价格 *</label>
+                        <input type="number" id="product-price" step="0.01" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="product-stock">库存 *</label>
+                        <input type="number" id="product-stock" min="0" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="product-image">商品图片</label>
+                    <input type="file" id="product-image" accept="image/*">
+                    <div id="image-preview"></div>
+                    <input type="hidden" id="product-image-url">
+                </div>
+                <div class="form-group">
+                    <label for="product-description">商品描述</label>
+                    <textarea id="product-description" rows="3"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="product-special-offer"> 特价商品
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="product-flash-sale"> 限时秒杀
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" id="cancel-btn">取消</button>
+                    <button type="submit" class="btn success">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="scripts/api.js"></script>
+    <script>
+        // 管理员管理器 - 统一管理所有功能
+        const AdminManager = {
+            products: [],
+            currentModule: 'dashboard',
+            
+            // 初始化
+            init() {
+                console.log('[AdminManager] 初始化管理员界面');
+                
+                // 检查登录状态
+                if (!this.checkAuth()) {
+                    return;
+                }
+                
+                // 绑定事件
+                this.bindEvents();
+                
+                // 加载数据
+                this.loadAllProducts();
+            },
+            
+            // 检查认证
+            checkAuth() {
+                try {
+                    const userStr = localStorage.getItem('user');
+                    if (!userStr) {
+                        window.location.href = 'admin-login.html';
+                        return false;
+                    }
+                    const user = JSON.parse(userStr);
+                    if (!user || user.role !== 'admin') {
+                        window.location.href = 'admin-login.html';
+                        return false;
+                    }
+                    return true;
+                } catch (error) {
+                    console.error('[AdminManager] 认证检查失败:', error);
+                    window.location.href = 'admin-login.html';
+                    return false;
+                }
+            },
+            
+            // 绑定事件
+            bindEvents() {
+                // 导航栏点击事件
+                const navLinks = document.querySelectorAll('.nav-link');
+                navLinks.forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const module = link.getAttribute('data-module');
+                        this.switchModule(module);
+                    });
+                });
+                
+                // 退出登录
+                const logoutBtn = document.getElementById('logout-btn');
+                if (logoutBtn) {
+                    logoutBtn.addEventListener('click', () => {
+                        localStorage.removeItem('user');
+                        window.location.href = 'admin-login.html';
+                    });
+                }
+                
+                // 模态框关闭
+                const modalClose = document.getElementById('modal-close');
+                const cancelBtn = document.getElementById('cancel-btn');
+                const modal = document.getElementById('product-modal');
+                
+                if (modalClose) {
+                    modalClose.addEventListener('click', () => this.closeModal());
+                }
+                if (cancelBtn) {
+                    cancelBtn.addEventListener('click', () => this.closeModal());
+                }
+                if (modal) {
+                    modal.addEventListener('click', (e) => {
+                        if (e.target === modal) {
+                            this.closeModal();
+                        }
+                    });
+                }
+                
+                // 图片选择
+                const imageInput = document.getElementById('product-image');
+                if (imageInput) {
+                    imageInput.addEventListener('change', (e) => this.handleImageSelect(e));
+                }
+                
+                // 表单提交
+                const form = document.getElementById('product-form');
+                if (form) {
+                    form.addEventListener('submit', (e) => {
+                        e.preventDefault();
+                        this.saveProduct();
+                    });
+                }
+            },
+            
+            // 切换模块
+            switchModule(module) {
+                console.log('[AdminManager] 切换模块:', module);
+                this.currentModule = module;
+                
+                // 更新导航状态
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('data-module') === module) {
+                        link.classList.add('active');
+                    }
+                });
+                
+                // 隐藏所有模块
+                document.querySelectorAll('.admin-module').forEach(mod => {
+                    mod.classList.remove('active');
+                });
+                
+                // 显示当前模块
+                const moduleElement = document.getElementById(module + '-module');
+                if (moduleElement) {
+                    moduleElement.classList.add('active');
+                    
+                    // 加载模块数据
+                    if (module === 'dashboard') {
+                        this.updateDashboard();
+                    } else if (module === 'specialOffers') {
+                        this.renderProducts('specialOffers');
+                    } else {
+                        this.renderProducts(module);
+                    }
+                }
+            },
+            
+            // 加载所有商品
+            async loadAllProducts() {
+                try {
+                    console.log('[AdminManager] 加载商品数据...');
+                    const response = await apiClient.getAllProducts();
+                    if (response.success && response.products) {
+                        this.products = response.products;
+                        console.log('[AdminManager] 加载成功，共', this.products.length, '个商品');
+                        this.updateDashboard();
+                        this.renderProducts(this.currentModule);
+                    } else {
+                        console.error('[AdminManager] 加载失败:', response.message);
+                    }
+                } catch (error) {
+                    console.error('[AdminManager] 加载商品失败:', error);
+                }
+            },
+            
+            // 更新仪表盘
+            updateDashboard() {
+                const total = this.products.length;
+                const specialOffers = this.products.filter(p => p.isSpecialOffer).length;
+                const flashSales = this.products.filter(p => p.isFlashSale).length;
+                
+                const totalEl = document.getElementById('total-products');
+                const specialEl = document.getElementById('special-offers-count');
+                const flashEl = document.getElementById('flash-sales-count');
+                
+                if (totalEl) totalEl.textContent = total;
+                if (specialEl) specialEl.textContent = specialOffers;
+                if (flashEl) flashEl.textContent = flashSales;
+            },
+            
+            // 渲染商品列表
+            renderProducts(category) {
+                let filteredProducts = [];
+                
+                if (category === 'specialOffers') {
+                    filteredProducts = this.products.filter(p => p.isSpecialOffer);
+                } else {
+                    filteredProducts = this.products.filter(p => p.category === category);
+                }
+                
+                const tableBodyId = category + '-table-body';
+                const tableBody = document.getElementById(tableBodyId);
+                if (!tableBody) return;
+                
+                if (filteredProducts.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 20px;">暂无商品数据</td></tr>';
+                    return;
+                }
+                
+                tableBody.innerHTML = '';
+                filteredProducts.forEach(product => {
+                    const row = document.createElement('tr');
+                    const imageSrc = product.image || 'src/shengxian.png';
+                    const isBase64 = imageSrc.startsWith('data:image/');
+                    const imageUrl = isBase64 ? imageSrc : imageSrc + '?t=' + Date.now();
+                    
+                    const categoryNames = {
+                        'freshProduce': '新鲜果蔬',
+                        'meatPoultry': '肉禽蛋品',
+                        'seafood': '水产海鲜',
+                        'dairyBakery': '乳品面点',
+                        'beanProducts': '豆制品/杂粮',
+                        'readyMeals': '速食净菜'
+                    };
+                    
+                    let categoryCol = '';
+                    if (category === 'specialOffers') {
+                        categoryCol = `<td>${categoryNames[product.category] || product.category}</td>`;
+                    } else {
+                        categoryCol = `<td>${product.isSpecialOffer ? '是' : '否'}</td>`;
+                    }
+                    
+                    row.innerHTML = `
+                        <td>${product.id}</td>
+                        <td>${product.name}</td>
+                        <td><img src="${imageUrl}" alt="${product.name}" class="product-image" onerror="this.src='src/shengxian.png'"></td>
+                        <td>¥${(product.price || 0).toFixed(2)}</td>
+                        <td>${product.stock || 0}</td>
+                        ${categoryCol}
+                        <td>${product.isFlashSale ? '是' : '否'}</td>
+                        <td>
+                            <button class="btn edit-btn" data-id="${product.id}">编辑</button>
+                            <button class="btn danger delete-btn" data-id="${product.id}">删除</button>
+                        </td>
+                    `;
+                    
+                    // 绑定编辑和删除事件
+                    const editBtn = row.querySelector('.edit-btn');
+                    const deleteBtn = row.querySelector('.delete-btn');
+                    
+                    if (editBtn) {
+                        editBtn.addEventListener('click', () => {
+                            this.openProductModal(product);
+                        });
+                    }
+                    
+                    if (deleteBtn) {
+                        deleteBtn.addEventListener('click', () => {
+                            this.deleteProduct(product.id);
+                        });
+                    }
+                    
+                    tableBody.appendChild(row);
+                });
+            },
+            
+            // 打开商品编辑模态框
+            openProductModal(product = null, category = null) {
+                const modal = document.getElementById('product-modal');
+                const form = document.getElementById('product-form');
+                const title = document.getElementById('modal-title');
+                
+                // 重置表单
+                form.reset();
+                document.getElementById('product-id').value = '';
+                document.getElementById('image-preview').innerHTML = '';
+                
+                if (product) {
+                    // 编辑模式
+                    title.textContent = '编辑商品';
+                    document.getElementById('product-id').value = product.id;
+                    document.getElementById('product-name').value = product.name || '';
+                    document.getElementById('product-category').value = product.category || '';
+                    document.getElementById('product-price').value = product.price || '';
+                    document.getElementById('product-stock').value = product.stock || '';
+                    document.getElementById('product-description').value = product.description || '';
+                    document.getElementById('product-special-offer').checked = product.isSpecialOffer || false;
+                    document.getElementById('product-flash-sale').checked = product.isFlashSale || false;
+                    
+                    if (product.image) {
+                        const preview = document.getElementById('image-preview');
+                        preview.innerHTML = `<img src="${product.image}" alt="预览">`;
+                        document.getElementById('product-image-url').value = product.image;
+                    }
+                } else {
+                    // 添加模式
+                    title.textContent = '添加商品';
+                    if (category) {
+                        document.getElementById('product-category').value = category;
+                    }
+                }
+                
+                modal.classList.add('active');
+            },
+            
+            // 关闭模态框
+            closeModal() {
+                const modal = document.getElementById('product-modal');
+                modal.classList.remove('active');
+            },
+            
+            // 处理图片选择
+            handleImageSelect(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                // 验证文件类型
+                if (!file.type.startsWith('image/')) {
+                    alert('请选择图片文件');
+                    return;
+                }
+                
+                // 验证文件大小（2MB）
+                if (file.size > 2 * 1024 * 1024) {
+                    alert('图片大小不能超过2MB');
+                    return;
+                }
+                
+                // 转换为Base64
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const preview = document.getElementById('image-preview');
+                    preview.innerHTML = `<img src="${e.target.result}" alt="预览">`;
+                    document.getElementById('product-image-url').value = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            },
+            
+            // 保存商品
+            async saveProduct() {
+                try {
+                    const id = document.getElementById('product-id').value;
+                    const name = document.getElementById('product-name').value.trim();
+                    const category = document.getElementById('product-category').value;
+                    const price = parseFloat(document.getElementById('product-price').value);
+                    const stock = parseInt(document.getElementById('product-stock').value);
+                    const image = document.getElementById('product-image-url').value || 'src/shengxian.png';
+                    const description = document.getElementById('product-description').value.trim();
+                    const isSpecialOffer = document.getElementById('product-special-offer').checked;
+                    const isFlashSale = document.getElementById('product-flash-sale').checked;
+                    
+                    // 验证
+                    if (!name) {
+                        alert('请输入商品名称');
+                        return;
+                    }
+                    if (isNaN(price) || price <= 0) {
+                        alert('请输入有效的价格');
+                        return;
+                    }
+                    if (isNaN(stock) || stock < 0) {
+                        alert('请输入有效的库存');
+                        return;
+                    }
+                    
+                    const productData = {
+                        name,
+                        category,
+                        price,
+                        stock,
+                        image,
+                        description,
+                        isSpecialOffer,
+                        isFlashSale
+                    };
+                    
+                    let response;
+                    if (id) {
+                        // 更新
+                        response = await apiClient.updateProduct(parseInt(id), productData);
+                    } else {
+                        // 添加
+                        response = await apiClient.addProduct(productData);
+                    }
+                    
+                    if (response.success) {
+                        alert('保存成功！');
+                        this.closeModal();
+                        
+                        // 重新加载数据
+                        await this.loadAllProducts();
+                        
+                        // 通知用户界面更新
+                        this.notifyUserInterface();
+                    } else {
+                        alert('保存失败: ' + (response.message || '未知错误'));
+                    }
+                } catch (error) {
+                    console.error('[AdminManager] 保存商品失败:', error);
+                    alert('保存失败，请重试');
+                }
+            },
+            
+            // 删除商品
+            async deleteProduct(id) {
+                if (!confirm('确定要删除这个商品吗？')) {
+                    return;
+                }
+                
+                try {
+                    const response = await apiClient.deleteProduct(id);
+                    if (response.success) {
+                        alert('删除成功！');
+                        
+                        // 重新加载数据
+                        await this.loadAllProducts();
+                        
+                        // 通知用户界面更新
+                        this.notifyUserInterface();
+                    } else {
+                        alert('删除失败: ' + (response.message || '未知错误'));
+                    }
+                } catch (error) {
+                    console.error('[AdminManager] 删除商品失败:', error);
+                    alert('删除失败，请重试');
+                }
+            },
+            
+            // 通知用户界面更新
+            notifyUserInterface() {
+                // 使用BroadcastChannel通知所有用户界面页面
+                if (typeof BroadcastChannel !== 'undefined') {
+                    const channel = new BroadcastChannel('product-updates');
+                    channel.postMessage({ 
+                        action: 'product-updated', 
+                        timestamp: Date.now() 
+                    });
+                    console.log('[AdminManager] 已发送商品更新通知');
+                }
+                
+                // 使用localStorage作为备选方案
+                try {
+                    localStorage.setItem('productUpdated', Date.now().toString());
+                } catch (e) {
+                    console.warn('[AdminManager] localStorage通知失败:', e);
+                }
+            }
+        };
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            AdminManager.init();
+        });
+    </script>
+</body>
+</html>
+

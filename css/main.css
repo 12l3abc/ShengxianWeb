@@ -1,0 +1,1040 @@
+/* 全局样式重置 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f8f9fa;
+}
+
+/* 导航栏样式 */
+.navbar {
+    background-color: #ffffff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    height: 70px;
+    width: 100%;
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    gap: 20px;
+}
+
+.nav-logo {
+    color: #4CAF50;
+    font-size: 28px;
+    font-weight: bold;
+    text-decoration: none;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    flex: 1;
+    justify-content: center;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.nav-menu::-webkit-scrollbar {
+    display: none;
+}
+
+.nav-item {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.nav-item .nav-link {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    padding: 10px 12px;
+    border-radius: 5px;
+    font-size: 14px;
+    white-space: nowrap;
+    display: block;
+    text-align: center;
+}
+
+.nav-item .nav-link:hover,
+.nav-item .nav-link.active {
+    color: #4CAF50;
+    background-color: #f0fff4;
+    transform: translateY(-2px);
+    box-shadow: 0 3px 8px rgba(76, 175, 80, 0.2);
+}
+
+/* 用户操作区域 */
+.user-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin: 0;
+    flex-shrink: 0;
+}
+
+/* 任务中心样式 */
+.task-center {
+    position: relative;
+    display: inline-block;
+    z-index: 1001;
+}
+
+/* 添加伪元素作为桥梁，确保鼠标移动路径上没有间隙 */
+.task-center::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 20px;
+    /* 覆盖从任务中心到下拉菜单的间隙 */
+    z-index: 1999;
+    /* 使伪元素不可见但可交互 */
+    pointer-events: auto;
+    /* 确保伪元素在hover时也能保持显示 */
+    background-color: transparent;
+}
+
+.task-center-label {
+    cursor: pointer;
+    color: #4CAF50;
+    font-weight: bold;
+    padding: 8px 12px;
+    border-radius: 5px;
+    display: inline-block;
+    font-size: 14px;
+    background-color: white;
+    border: 2px solid transparent;
+    min-width: 100px;
+    text-align: center;
+}
+
+.task-center-label:hover {
+    background-color: #f0fff4;
+    transform: translateY(-2px);
+    box-shadow: 0 3px 8px rgba(76, 175, 80, 0.2);
+    border-color: #4CAF50;
+}
+
+.task-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    z-index: 2000;
+    min-width: 150px;
+    margin-top: 0;
+    padding: 8px 0;
+    display: none;
+    backdrop-filter: blur(10px);
+    /* 移除透明边框，避免鼠标移动间隙问题 */
+    border-top: 1px solid #e0e0e0;
+    /* 恢复完整圆角 */
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    /* 添加内边距但不影响外边距 */
+    transform: translateY(0);
+}
+
+.task-center:hover .task-dropdown {
+    display: block;
+}
+
+.task-dropdown:hover {
+    display: block;
+}
+
+.task-dropdown a {
+    display: block;
+    padding: 12px 20px;
+    text-decoration: none;
+    color: #333;
+    font-size: 14px;
+    border-radius: 6px;
+    margin: 4px 8px;
+    text-align: left;
+    border-left: 3px solid transparent;
+}
+
+.task-dropdown a:hover {
+    background-color: #f0fff4;
+    color: #4CAF50;
+    border-left-color: #4CAF50;
+    transform: translateX(5px);
+}
+
+.task-dropdown a:active {
+    transform: translateX(3px);
+}
+
+#user-info {
+    font-weight: bold;
+    color: #666;
+    font-size: 14px;
+}
+
+#personal-center {
+    text-decoration: none;
+    color: #4CAF50;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 8px 12px;
+    border-radius: 5px;
+}
+
+#personal-center:hover {
+    background-color: #f0fff4;
+    transform: translateY(-2px);
+    box-shadow: 0 3px 8px rgba(76, 175, 80, 0.2);
+}
+
+/* 主要内容区域 */
+#main-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* 模块样式 */
+.module {
+    display: none;
+    padding: 30px 0;
+    margin-bottom: 40px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.module.active {
+    display: block;
+}
+
+.module-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 30px 20px;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border-radius: 15px;
+    margin: -30px -30px 30px -30px;
+}
+
+.module-header h2 {
+    font-size: 36px;
+    font-weight: bold;
+    color: #4CAF50;
+    margin-bottom: 15px;
+    text-shadow: 0 2px 4px rgba(76, 175, 80, 0.1);
+}
+
+.module-header p {
+    font-size: 18px;
+    color: #666;
+    margin: 0;
+}
+
+/* 页面过渡效果 */
+.page-transition {
+}
+
+/* 轮播图样式 */
+.carousel-container {
+    position: relative;
+    width: 100%;
+    height: 450px;
+    overflow: hidden;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    margin: 30px 0;
+    background: #f0f0f0;
+}
+
+.carousel {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.carousel-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
+    background-position: center;
+    transform: scale(1.05);
+}
+
+.carousel-slide.active {
+    opacity: 1;
+    z-index: 1;
+    transform: scale(1);
+}
+
+/* 幻灯片进入动画 - 由JavaScript控制 */
+.carousel-slide.slide-in {
+    opacity: 0;
+    transform: translateX(100%);
+}
+
+.carousel-slide.slide-in.active {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* 幻灯片退出动画 - 由JavaScript控制 */
+.carousel-slide.slide-out {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.carousel-slide.slide-out:not(.active) {
+    opacity: 0;
+    transform: translateX(-100%);
+}
+
+/* 反向切换动画（上一张） - 由JavaScript控制 */
+.carousel-slide.prev-slide-in {
+    opacity: 0;
+    transform: translateX(-100%);
+}
+
+.carousel-slide.prev-slide-in.active {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.carousel-slide.prev-slide-out {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.carousel-slide.prev-slide-out:not(.active) {
+    opacity: 0;
+    transform: translateX(100%);
+}
+
+.carousel-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.carousel-slide:hover img {
+    transform: scale(1.1);
+}
+
+.carousel-caption {
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    color: white;
+    padding: 25px 50px;
+    border-radius: 15px;
+    text-align: center;
+    z-index: 2;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    max-width: 80%;
+}
+
+.carousel-caption h3 {
+    font-size: 32px;
+    margin: 0 0 15px 0;
+    color: #fff;
+    font-weight: bold;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.carousel-caption p {
+    font-size: 20px;
+    margin: 0;
+    color: #fff;
+    opacity: 0.95;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+
+
+/* 响应式样式 */
+@media (max-width: 768px) {
+    .carousel-container {
+        height: 300px;
+        margin: 20px 0;
+    }
+    
+    .carousel-caption {
+        bottom: 30px;
+        padding: 15px 30px;
+        max-width: 90%;
+    }
+    
+    .carousel-caption h3 {
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+    
+    .carousel-caption p {
+        font-size: 14px;
+    }
+    
+    .carousel-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
+    
+    .carousel-btn.prev-btn {
+        left: 10px;
+    }
+    
+    .carousel-btn.next-btn {
+        right: 10px;
+    }
+    
+    .indicator {
+        width: 10px;
+        height: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .carousel-container {
+        height: 250px;
+    }
+    
+    .carousel-caption {
+        bottom: 20px;
+        padding: 10px 20px;
+    }
+    
+    .carousel-caption h3 {
+        font-size: 18px;
+    }
+    
+    .carousel-caption p {
+        font-size: 12px;
+    }
+    
+    .carousel-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 18px;
+    }
+}
+
+/* 轮播控制按钮 - 恢复原始设计 */
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid #e0e0e0;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    font-size: 28px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    color: #4CAF50;
+    opacity: 0.9;
+    overflow: hidden;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    user-select: none;
+    font-family: Arial, sans-serif;
+}
+
+/* 上一张按钮 - 原始位置 */
+.carousel-btn.prev-btn {
+    left: 25px;
+}
+
+/* 下一张按钮 - 原始位置 */
+.carousel-btn.next-btn {
+    right: 25px;
+}
+
+/* 轮播按钮悬停效果 - 原始设计 */
+.carousel-btn:hover {
+    background: #4CAF50;
+    color: white;
+    border-color: #4CAF50;
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3);
+    opacity: 1;
+}
+
+/* 轮播按钮点击效果 - 原始设计 */
+.carousel-btn:active {
+    transform: translateY(-50%) scale(0.95);
+    box-shadow: 0 2px 10px rgba(76, 175, 80, 0.5);
+}
+
+/* 轮播按钮聚焦效果 - 原始设计 */
+.carousel-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+}
+
+/* 轮播容器悬停时按钮的显示效果 */
+.carousel-container:hover .carousel-btn {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+}
+
+/* 轮播容器未悬停时按钮的状态（增强用户体验） */
+.carousel-container:not(:hover) .carousel-btn {
+    opacity: 0.8;
+    transform: translateY(-50%) scale(0.95);
+}
+
+/* 轮播指示器 - 恢复原始设计 */
+.carousel-indicators {
+    position: absolute;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    z-index: 3;
+    padding: 0;
+    background: transparent;
+    backdrop-filter: none;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+/* 指示器样式 - 恢复为小圆点设计 */
+.indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    position: relative;
+    border: 2px solid transparent;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 指示器悬停效果 - 原始设计 */
+.indicator:hover {
+    background: rgba(255, 255, 255, 0.9);
+    transform: scale(1.2);
+}
+
+/* 指示器激活状态 - 原始设计 */
+.indicator.active {
+    background: #4CAF50;
+    transform: scale(1.3);
+    border-color: white;
+    box-shadow: 0 0 15px rgba(76, 175, 80, 0.6);
+}
+
+/* 文字特效样式 - 由JavaScript控制 */
+.text-glow {
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+.module-header h2 {
+    font-size: 32px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.module-header p {
+    font-size: 18px;
+    color: #666;
+}
+
+/* 商品卡片样式 */
+.product-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 350px;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.product-image {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    background: #f8f9fa;
+}
+
+.product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.product-card:hover .product-image img {
+    transform: scale(1.05);
+}
+
+.product-info {
+    padding: 15px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.product-info h4 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.product-info p {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    flex: 1;
+}
+
+.product-meta {
+    margin: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.price {
+    font-size: 20px;
+    font-weight: bold;
+    color: #FF5722;
+}
+
+/* 加入购物车按钮 */
+.add-to-cart-btn {
+    background: linear-gradient(45deg, #4CAF50, #8BC34A);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.add-to-cart-btn:hover {
+    background: linear-gradient(45deg, #43A047, #7CB342);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+}
+
+/* 购物车图标 */
+.cart-icon {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: linear-gradient(45deg, #FF9800, #FF5722);
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    padding: 18px;
+    box-sizing: border-box;
+    box-shadow: 0 6px 25px rgba(255, 152, 0, 0.4);
+    cursor: pointer;
+    z-index: 1000;
+    border: 3px solid white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cart-icon:hover {
+    transform: scale(1.15);
+    box-shadow: 0 8px 30px rgba(255, 152, 0, 0.5);
+    background: linear-gradient(45deg, #FF5722, #FF9800);
+}
+
+.cart-icon:active {
+    transform: scale(1.05);
+}
+
+.cart-icon img {
+    width: 32px;
+    height: 32px;
+    filter: brightness(0) invert(1);
+}
+
+.cart-icon:hover img {
+    transform: scale(1.1);
+}
+
+.cart-count {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: linear-gradient(45deg, #f44336, #e53935);
+    color: white;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+    box-shadow: 0 3px 10px rgba(244, 67, 54, 0.5);
+    border: 2px solid white;
+}
+
+/* 今日特价页面样式 */
+#special-offers {
+    background: linear-gradient(135deg, #fff8f5 0%, #fff5f0 100%);
+}
+
+.tabs-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+    gap: 20px;
+    padding: 0 20px;
+    flex-wrap: wrap;
+}
+
+.tab-btn {
+    padding: 18px 50px;
+    border: 3px solid transparent;
+    background: linear-gradient(135deg, white, #fffaf8) padding-box, linear-gradient(45deg, #ff5722, #ff7043) border-box;
+    color: #ff5722;
+    font-size: 20px;
+    cursor: pointer;
+    border-radius: 50px;
+    font-weight: bold;
+    box-shadow: 0 4px 15px rgba(255, 87, 34, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    position: relative;
+    overflow: hidden;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.tab-btn.active {
+    background: linear-gradient(45deg, #ff5722, #ff7043) padding-box, linear-gradient(45deg, #ff5722, #ff7043) border-box;
+    color: white;
+    box-shadow: 0 8px 25px rgba(255, 87, 34, 0.4), inset 0 2px 0 rgba(255, 255, 255, 0.2);
+    transform: translateY(-3px) scale(1.05);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.daily-offers-description {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 25px;
+    background-color: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid #ffe0d6;
+}
+
+.daily-offers-description p {
+    font-size: 18px;
+    color: #666;
+    margin: 0;
+    font-weight: 500;
+}
+
+/* 商品网格样式 */
+.product-grid, .meat-grid, .seafood-grid, .dairy-grid, .bean-grid, .meal-grid, .special-offers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+    margin: 20px 12px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* 商品卡片样式 */
+.product-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 300px;
+    border: 1px solid #e0e0e0;
+}
+
+.product-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    border-color: #4CAF50;
+}
+
+.product-image {
+    position: relative;
+    width: 100%;
+    height: 170px;
+    overflow: hidden;
+    background: #f8f9fa;
+}
+
+.product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.product-card:hover .product-image img {
+    transform: scale(1.1);
+}
+
+.product-info {
+    padding: 12px 14px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.product-info h4 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.product-info p {
+    margin: 0;
+    font-size: 13px;
+    color: #666;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    flex: 1;
+}
+
+.product-meta {
+    margin: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-top: 1px solid #f0f0f0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.price {
+    font-size: 18px;
+    font-weight: bold;
+    color: #FF5722;
+    text-shadow: 0 1px 2px rgba(255, 87, 34, 0.1);
+}
+
+/* 模块背景样式 */
+#meat-poultry .module-header {
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+}
+
+#seafood .module-header {
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+}
+
+#dairy-bakery .module-header {
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+}
+
+#bean-products .module-header {
+    background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+}
+
+#ready-meals .module-header {
+    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+}
+
+#direct-sourcing .module-header {
+    background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%);
+}
+
+#special-offers .module-header {
+    background: linear-gradient(135deg, #fff8f5 0%, #fff5f0 100%);
+}
+
+/* 文本收紧与省略，防止长标题/描述撑开卡片 */
+.module .module-header h2,
+.module .module-header p,
+.product-card h4,
+.product-card .product-description,
+.province-card h3,
+.province-card .province-meta,
+.local-product-item h4,
+.local-product-item p,
+.ds-product-card h4,
+.ds-product-card .ds-desc,
+.ds-province-name,
+.ds-province-desc,
+.simple-list li {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    word-break: break-all;
+}
+
+.module .module-header h2,
+.product-card h4,
+.province-card h3,
+.local-product-item h4,
+.ds-product-card h4,
+.ds-province-name {
+    -webkit-line-clamp: 1;
+}
+
+.module .module-header p,
+.product-card .product-description,
+.province-card .province-meta,
+.local-product-item p,
+.ds-product-card .ds-desc,
+.ds-province-desc,
+.simple-list li {
+    -webkit-line-clamp: 2;
+}
+
+.product-card .price .original-price,
+.product-card .price .discount-price {
+    max-width: 100%;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.product-card.simple .product-info {
+    padding: 10px 12px;
+}
+
+.product-card.simple h4 {
+    margin: 0 0 6px;
+}
+
+.product-card.simple .price {
+    margin-top: 4px;
+}
+
+/* 产地直采页面样式 */
+#direct-sourcing {
+    background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%);
+}
+
+/* 动画关键帧 - 已移除，由JavaScript实现 */
+
+/* 移动端响应式样式 */
+@media (max-width: 768px) {
+    .nav-menu {
+        flex-direction: column;
+        position: fixed;
+        top: 70px;
+        left: -100%;
+        width: 100%;
+        height: calc(100vh - 70px);
+        background: white;
+        padding: 20px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-menu.active {
+        left: 0;
+    }
+
+    .nav-item {
+        margin: 10px 0;
+    }
+
+    .product-grid,
+    .meat-grid,
+    .seafood-grid,
+    .dairy-grid,
+    .bean-grid,
+    .meal-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 15px;
+    }
+
+    .tabs-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .tab-btn {
+        width: 80%;
+        margin-bottom: 10px;
+    }
+}
